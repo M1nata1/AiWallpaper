@@ -1,0 +1,223 @@
+import AppKit
+import Combine
+import SwiftUI
+import WallpaperCore
+
+@main
+@MainActor
+final class AppDelegate: NSObject, NSApplicationDelegate {
+    private let library: WallpaperLibrary
+    private let preferences: Preferences
+    private let manager: WallpaperManager
+    private let importer: ImportCoordinator
+    private var windows: WindowManager!
+    private var statusMenu: StatusMenuController?
+    private var cancellables: Set<AnyCancellable> = []
+    private var isLaunched = false
+    private var urlsOpenedBeforeLaunch: [URL] = []
+
+    static func main() {
+        let app = NSApplication.shared
+        let delegate = AppDelegate()
+        app.delegate = delegate
+        withExtendedLifetime(delegate) {
+            app.run()
+        }
+    }
+
+    override init() {
+        library = WallpaperLibrary()
+        preferences = Preferences()
+        manager = WallpaperManager(library: library, preferences: preferences)
+        importer = ImportCoordinator(library: library, manager: manager)
+        super.init()
+        windows = WindowManager(
+            library: { [unowned self] in
+                AnyView(
+                    LibraryView(actions: LibraryActions(
+                        addFiles: { [unowned self] in addWallpapers(nil) },
+                        openSettings: { [unowned self] in showSettings(nil) }
+                    ))
+                    .environmentObject(library)
+                    .environmentObject(manager)
+                    .environmentObject(importer)
+                )
+            },
+            settings: { [unowned self] in
+                AnyView(
+                    SettingsView()
+                        .environmentObject(preferences)
+                        .environmentObject(library)
+                )
+            }
+        )
+    }
+
+    // MARK: - NSApplicationDelegate
+
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        if activateRunningCopy() {
+            return
+        }
+        NSApp.mainMenu = makeMainMenu()
+        manager.start()
+        statusMenu = StatusMenuController(library: library, manager: manager, actions: .init(
+            openLibrary: { [unowned self] in showLibrary(nil) },
+            addFiles: { [unowned self] in addWallpapers(nil) },
+            openSettings: { [unowned self] in showSettings(nil) },
+            showAbout: { [unowned self] in showAbout(nil) }
+        ))
+        importer.$failures
+            .filter { !$0.isEmpty }
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in self?.presentImportFailures() }
+            .store(in: &cancellables)
+
+        isLaunched = true
+        if !urlsOpenedBeforeLaunch.isEmpty {
+            open(urlsOpenedBeforeLaunch)
+            urlsOpenedBeforeLaunch = []
+        } else if library.items.isEmpty {
+            // First launch: show where to start instead of a lonely menu bar icon.
+            windows.showLibrary()
+        }
+    }
+
+    /// Files opened with the app (Finder's "Open With", dropping on the icon) become the wallpaper.
+    func application(_ application: NSApplication, open urls: [URL]) {
+        if isLaunched {
+            open(urls)
+        } else {
+            urlsOpenedBeforeLaunch += urls
+        }
+    }
+
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        windows.showLibrary()
+        return false
+    }
+
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+        false
+    }
+
+    // MARK: - Actions
+
+    @objc func showLibrary(_ sender: Any?) {
+        windows.showLibrary()
+    }
+
+    @objc func showSettings(_ sender: Any?) {
+        windows.showSettings()
+    }
+
+    @objc func showAbout(_ sender: Any?) {
+        NSApp.activate(ignoringOtherApps: true)
+        let credits = NSAttributedString(
+            string: NSLocalizedString("Animated wallpapers from videos, GIFs and pictures.", comment: "About panel"),
+            attributes: [.font: NSFont.systemFont(ofSize: 11), .foregroundColor: NSColor.secondaryLabelColor]
+        )
+        NSApp.orderFrontStandardAboutPanel(options: [.credits: credits])
+    }
+
+    @objc func addWallpapers(_ sender: Any?) {
+        windows.showLibrary()
+        guard let window = windows.libraryWindow else { return }
+        let panel = NSOpenPanel()
+        panel.allowsMultipleSelection = true
+        panel.canChooseFiles = true
+        panel.canChooseDirectories = true
+        panel.allowedContentTypes = MediaImporter.acceptedContentTypes
+        panel.message = NSLocalizedString("Choose videos, GIFs or pictures. Folders are searched too.", comment: "Open panel")
+        panel.prompt = NSLocalizedString("Add", comment: "Open panel button")
+        panel.beginSheetModal(for: window) { [weak self] response in
+            guard response == .OK else { return }
+            self?.importer.importFiles(panel.urls, applyWhenDone: false)
+        }
+    }
+
+    // MARK: - Helpers
+
+    private func open(_ urls: [URL]) {
+        windows.showLibrary()
+        importer.importFiles(urls, applyWhenDone: true)
+    }
+
+    /// Only one copy may own the desktop; a second launch brings the first one forward.
+    private func activateRunningCopy() -> Bool {
+        guard let bundleID = Bundle.main.bundleIdentifier else { return false }
+        let current = NSRunningApplication.current
+        guard let other = NSRunningApplication.runningApplications(withBundleIdentifier: bundleID).first(where: { $0 != current }) else {
+            return false
+        }
+        other.activate(options: [])
+        NSApp.terminate(nil)
+        return true
+    }
+
+    private func presentImportFailures() {
+        let failures = importer.failures
+        importer.failures = []
+        guard let first = failures.first else { return }
+        let alert = NSAlert()
+        alert.alertStyle = .warning
+        if failures.count == 1 {
+            alert.messageText = String(format: NSLocalizedString("“%@” could not be added", comment: "Import error title"), first.fileName)
+            alert.informativeText = first.message
+        } else {
+            alert.messageText = NSLocalizedString("Some files could not be added", comment: "Import error title")
+            alert.informativeText = failures.prefix(8)
+                .map { "\($0.fileName): \($0.message)" }
+                .joined(separator: "\n\n")
+        }
+        if let window = windows.visibleWindow {
+            alert.beginSheetModal(for: window)
+        } else {
+            NSApp.activate(ignoringOtherApps: true)
+            alert.runModal()
+        }
+    }
+
+    private func makeMainMenu() -> NSMenu {
+        let appMenu = NSMenu()
+        appMenu.addItem(withTitle: NSLocalizedString("About AiWallpaper", comment: "Menu item"), action: #selector(showAbout(_:)), keyEquivalent: "")
+        appMenu.addItem(.separator())
+        appMenu.addItem(withTitle: NSLocalizedString("Settings…", comment: "Menu item"), action: #selector(showSettings(_:)), keyEquivalent: ",")
+        appMenu.addItem(.separator())
+        appMenu.addItem(withTitle: NSLocalizedString("Hide AiWallpaper", comment: "Menu item"), action: #selector(NSApplication.hide(_:)), keyEquivalent: "h")
+        appMenu.addItem(withTitle: NSLocalizedString("Hide Others", comment: "Menu item"), action: #selector(NSApplication.hideOtherApplications(_:)), keyEquivalent: "h")
+            .keyEquivalentModifierMask = [.command, .option]
+        appMenu.addItem(withTitle: NSLocalizedString("Show All", comment: "Menu item"), action: #selector(NSApplication.unhideAllApplications(_:)), keyEquivalent: "")
+        appMenu.addItem(.separator())
+        appMenu.addItem(withTitle: NSLocalizedString("Quit AiWallpaper", comment: "Menu item"), action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+
+        let fileMenu = NSMenu(title: NSLocalizedString("File", comment: "Menu title"))
+        fileMenu.addItem(withTitle: NSLocalizedString("Add Wallpapers…", comment: "Menu item"), action: #selector(addWallpapers(_:)), keyEquivalent: "o")
+        fileMenu.addItem(withTitle: NSLocalizedString("Open Library…", comment: "Menu item"), action: #selector(showLibrary(_:)), keyEquivalent: "l")
+        fileMenu.addItem(.separator())
+        fileMenu.addItem(withTitle: NSLocalizedString("Close Window", comment: "Menu item"), action: #selector(NSWindow.performClose(_:)), keyEquivalent: "w")
+
+        let editMenu = NSMenu(title: NSLocalizedString("Edit", comment: "Menu title"))
+        editMenu.addItem(withTitle: NSLocalizedString("Undo", comment: "Menu item"), action: Selector(("undo:")), keyEquivalent: "z")
+        editMenu.addItem(withTitle: NSLocalizedString("Redo", comment: "Menu item"), action: Selector(("redo:")), keyEquivalent: "z")
+            .keyEquivalentModifierMask = [.command, .shift]
+        editMenu.addItem(.separator())
+        editMenu.addItem(withTitle: NSLocalizedString("Cut", comment: "Menu item"), action: #selector(NSText.cut(_:)), keyEquivalent: "x")
+        editMenu.addItem(withTitle: NSLocalizedString("Copy", comment: "Menu item"), action: #selector(NSText.copy(_:)), keyEquivalent: "c")
+        editMenu.addItem(withTitle: NSLocalizedString("Paste", comment: "Menu item"), action: #selector(NSText.paste(_:)), keyEquivalent: "v")
+        editMenu.addItem(withTitle: NSLocalizedString("Select All", comment: "Menu item"), action: #selector(NSText.selectAll(_:)), keyEquivalent: "a")
+
+        let windowMenu = NSMenu(title: NSLocalizedString("Window", comment: "Menu title"))
+        windowMenu.addItem(withTitle: NSLocalizedString("Minimize", comment: "Menu item"), action: #selector(NSWindow.performMiniaturize(_:)), keyEquivalent: "m")
+        windowMenu.addItem(withTitle: NSLocalizedString("Zoom", comment: "Menu item"), action: #selector(NSWindow.performZoom(_:)), keyEquivalent: "")
+        NSApp.windowsMenu = windowMenu
+
+        let mainMenu = NSMenu()
+        for submenu in [appMenu, fileMenu, editMenu, windowMenu] {
+            let item = NSMenuItem()
+            item.submenu = submenu
+            mainMenu.addItem(item)
+        }
+        return mainMenu
+    }
+}

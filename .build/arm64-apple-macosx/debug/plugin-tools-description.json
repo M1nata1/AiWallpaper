@@ -1,0 +1,1159 @@
+{
+  "builtTestProducts" : [
+    {
+      "binaryPath" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaperPackageTests.xctest/Contents/MacOS/AiWallpaperPackageTests",
+      "packagePath" : "/Users/fadevec/Documents/Personalization/AiWallpaper",
+      "productName" : "AiWallpaperPackageTests"
+    }
+  ],
+  "copyCommands" : {
+
+  },
+  "explicitTargetDependencyImportCheckingMode" : {
+    "none" : {
+
+    }
+  },
+  "generatedSourceTargetSet" : [
+
+  ],
+  "pluginDescriptions" : [
+
+  ],
+  "swiftCommands" : {
+    "C.AiWallpaper-arm64-apple-macosx15.0-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/sources",
+      "importPath" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/AppDelegate.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/Engine/SystemState.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/Engine/WallpaperManager.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/Engine/WallpaperWindow.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/ImportCoordinator.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/Preferences.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/Support.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/UI/LibraryView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/UI/SettingsView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/UI/StatusMenuController.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/UI/WindowManager.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/Modules/WallpaperCore.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/sources"
+        }
+      ],
+      "isLibrary" : false,
+      "moduleName" : "AiWallpaper",
+      "moduleOutputPath" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/Modules/AiWallpaper.swiftmodule",
+      "objects" : [
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/AppDelegate.swift.o",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/SystemState.swift.o",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/WallpaperManager.swift.o",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/WallpaperWindow.swift.o",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/ImportCoordinator.swift.o",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/Preferences.swift.o",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/Support.swift.o",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/LibraryView.swift.o",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/SettingsView.swift.o",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/StatusMenuController.swift.o",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/WindowManager.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx13.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-j10",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-Xfrontend",
+        "-entry-point-function-name",
+        "-Xfrontend",
+        "AiWallpaper_main",
+        "-swift-version",
+        "5",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "aiwallpaper"
+      ],
+      "outputFileMapPath" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/AppDelegate.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/SystemState.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/WallpaperManager.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/WallpaperWindow.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/ImportCoordinator.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/Preferences.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/Support.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/LibraryView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/SettingsView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/StatusMenuController.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/WindowManager.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/Modules/AiWallpaper.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/AppDelegate.swift",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/Engine/SystemState.swift",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/Engine/WallpaperManager.swift",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/Engine/WallpaperWindow.swift",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/ImportCoordinator.swift",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/Preferences.swift",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/Support.swift",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/UI/LibraryView.swift",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/UI/SettingsView.swift",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/UI/StatusMenuController.swift",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/UI/WindowManager.swift"
+      ],
+      "tempsPath" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.AiWallpaperPackageTests-arm64-apple-macosx15.0-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaperPackageTests.build/sources",
+      "importPath" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaperPackageTests.derived/runner.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/Modules/WallpaperCoreTests.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaperPackageTests.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "AiWallpaperPackageTests",
+      "moduleOutputPath" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/Modules/AiWallpaperPackageTests.swiftmodule",
+      "objects" : [
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaperPackageTests.build/runner.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx13.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-Xfrontend",
+        "-enable-cross-import-overlays",
+        "-j10",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaperPackageTests.build/include/AiWallpaperPackageTests-Swift.h",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "aiwallpaper"
+      ],
+      "outputFileMapPath" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaperPackageTests.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaperPackageTests.build/runner.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/Modules/AiWallpaperPackageTests.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaperPackageTests.derived/runner.swift"
+      ],
+      "tempsPath" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaperPackageTests.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.WallpaperCore-arm64-apple-macosx15.0-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCore.build/sources",
+      "importPath" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/WallpaperCore/AnimatedImageConverter.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/WallpaperCore/ImportError.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/WallpaperCore/MediaImporter.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/WallpaperCore/Thumbnailer.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/WallpaperCore/Wallpaper.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/WallpaperCore/WallpaperLibrary.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCore.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "WallpaperCore",
+      "moduleOutputPath" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/Modules/WallpaperCore.swiftmodule",
+      "objects" : [
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCore.build/AnimatedImageConverter.swift.o",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCore.build/ImportError.swift.o",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCore.build/MediaImporter.swift.o",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCore.build/Thumbnailer.swift.o",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCore.build/Wallpaper.swift.o",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCore.build/WallpaperLibrary.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx13.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-j10",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCore.build/include/WallpaperCore-Swift.h",
+        "-swift-version",
+        "5",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "aiwallpaper"
+      ],
+      "outputFileMapPath" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCore.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCore.build/AnimatedImageConverter.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCore.build/ImportError.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCore.build/MediaImporter.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCore.build/Thumbnailer.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCore.build/Wallpaper.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCore.build/WallpaperLibrary.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/Modules/WallpaperCore.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/WallpaperCore/AnimatedImageConverter.swift",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/WallpaperCore/ImportError.swift",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/WallpaperCore/MediaImporter.swift",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/WallpaperCore/Thumbnailer.swift",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/WallpaperCore/Wallpaper.swift",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/WallpaperCore/WallpaperLibrary.swift"
+      ],
+      "tempsPath" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCore.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.WallpaperCoreTests-arm64-apple-macosx15.0-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCoreTests.build/sources",
+      "importPath" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Tests/WallpaperCoreTests/WallpaperCoreTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/Modules/WallpaperCore.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCoreTests.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "WallpaperCoreTests",
+      "moduleOutputPath" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/Modules/WallpaperCoreTests.swiftmodule",
+      "objects" : [
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCoreTests.build/WallpaperCoreTests.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-Xfrontend",
+        "-enable-cross-import-overlays",
+        "-j10",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-swift-version",
+        "5",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "aiwallpaper"
+      ],
+      "outputFileMapPath" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCoreTests.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCoreTests.build/WallpaperCoreTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/Modules/WallpaperCoreTests.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/fadevec/Documents/Personalization/AiWallpaper/Tests/WallpaperCoreTests/WallpaperCoreTests.swift"
+      ],
+      "tempsPath" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCoreTests.build",
+      "wholeModuleOptimization" : false
+    }
+  },
+  "swiftFrontendCommands" : {
+
+  },
+  "swiftTargetScanArgs" : {
+    "AiWallpaper" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "AiWallpaper",
+      "-package-name",
+      "aiwallpaper",
+      "-c",
+      "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/AppDelegate.swift",
+      "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/Engine/SystemState.swift",
+      "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/Engine/WallpaperManager.swift",
+      "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/Engine/WallpaperWindow.swift",
+      "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/ImportCoordinator.swift",
+      "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/Preferences.swift",
+      "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/Support.swift",
+      "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/UI/LibraryView.swift",
+      "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/UI/SettingsView.swift",
+      "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/UI/StatusMenuController.swift",
+      "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/UI/WindowManager.swift",
+      "-I",
+      "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx13.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-j10",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-Xfrontend",
+      "-entry-point-function-name",
+      "-Xfrontend",
+      "AiWallpaper_main",
+      "-swift-version",
+      "5",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "aiwallpaper",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "AiWallpaperPackageTests" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "AiWallpaperPackageTests",
+      "-package-name",
+      "aiwallpaper",
+      "-c",
+      "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaperPackageTests.derived/runner.swift",
+      "-I",
+      "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx13.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-Xfrontend",
+      "-enable-cross-import-overlays",
+      "-j10",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaperPackageTests.build/include/AiWallpaperPackageTests-Swift.h",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "aiwallpaper",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "WallpaperCore" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "WallpaperCore",
+      "-package-name",
+      "aiwallpaper",
+      "-c",
+      "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/WallpaperCore/AnimatedImageConverter.swift",
+      "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/WallpaperCore/ImportError.swift",
+      "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/WallpaperCore/MediaImporter.swift",
+      "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/WallpaperCore/Thumbnailer.swift",
+      "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/WallpaperCore/Wallpaper.swift",
+      "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/WallpaperCore/WallpaperLibrary.swift",
+      "-I",
+      "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx13.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-j10",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCore.build/include/WallpaperCore-Swift.h",
+      "-swift-version",
+      "5",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "aiwallpaper",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "WallpaperCoreTests" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "WallpaperCoreTests",
+      "-package-name",
+      "aiwallpaper",
+      "-c",
+      "/Users/fadevec/Documents/Personalization/AiWallpaper/Tests/WallpaperCoreTests/WallpaperCoreTests.swift",
+      "-I",
+      "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-Xfrontend",
+      "-enable-cross-import-overlays",
+      "-j10",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-swift-version",
+      "5",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "aiwallpaper",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ]
+  },
+  "targetDependencyMap" : {
+    "AiWallpaper" : [
+      "WallpaperCore"
+    ],
+    "AiWallpaperPackageTests" : [
+      "WallpaperCoreTests",
+      "WallpaperCore"
+    ],
+    "WallpaperCore" : [
+
+    ],
+    "WallpaperCoreTests" : [
+      "WallpaperCore"
+    ]
+  },
+  "testDiscoveryCommands" : {
+
+  },
+  "testEntryPointCommands" : {
+    "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaperPackageTests.derived/runner.swift" : {
+      "inputs" : [
+
+      ],
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaperPackageTests.derived/runner.swift"
+        }
+      ]
+    }
+  },
+  "traitConfiguration" : {
+    "default" : {
+
+    }
+  },
+  "writeCommands" : {
+    "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper-entitlement.plist" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<entitlement-plist>"
+        },
+        {
+          "kind" : "virtual",
+          "name" : "<com.apple.security.get-task-allow>"
+        }
+      ],
+      "outputFilePath" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper-entitlement.plist"
+    },
+    "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/AppDelegate.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/Engine/SystemState.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/Engine/WallpaperManager.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/Engine/WallpaperWindow.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/ImportCoordinator.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/Preferences.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/Support.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/UI/LibraryView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/UI/SettingsView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/UI/StatusMenuController.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/AiWallpaper/UI/WindowManager.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/sources"
+    },
+    "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.product/Objects.LinkFileList" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<link-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/AppDelegate.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/ImportCoordinator.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/LibraryView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/Preferences.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/SettingsView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/StatusMenuController.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/Support.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/SystemState.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/WallpaperManager.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/WallpaperWindow.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.build/WindowManager.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCore.build/AnimatedImageConverter.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCore.build/ImportError.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCore.build/MediaImporter.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCore.build/Thumbnailer.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCore.build/Wallpaper.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCore.build/WallpaperLibrary.swift.o"
+        }
+      ],
+      "outputFilePath" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaper.product/Objects.LinkFileList"
+    },
+    "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaperPackageTests.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaperPackageTests.derived/runner.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaperPackageTests.build/sources"
+    },
+    "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaperPackageTests.product/Objects.LinkFileList" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<link-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaperPackageTests.build/runner.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCore.build/AnimatedImageConverter.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCore.build/ImportError.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCore.build/MediaImporter.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCore.build/Thumbnailer.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCore.build/Wallpaper.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCore.build/WallpaperLibrary.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCoreTests.build/WallpaperCoreTests.swift.o"
+        }
+      ],
+      "outputFilePath" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/AiWallpaperPackageTests.product/Objects.LinkFileList"
+    },
+    "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCore.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/WallpaperCore/AnimatedImageConverter.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/WallpaperCore/ImportError.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/WallpaperCore/MediaImporter.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/WallpaperCore/Thumbnailer.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/WallpaperCore/Wallpaper.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Sources/WallpaperCore/WallpaperLibrary.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCore.build/sources"
+    },
+    "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCoreTests.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fadevec/Documents/Personalization/AiWallpaper/Tests/WallpaperCoreTests/WallpaperCoreTests.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/WallpaperCoreTests.build/sources"
+    },
+    "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt" : {
+      "alwaysOutOfDate" : true,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<swift-get-version>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+        }
+      ],
+      "outputFilePath" : "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+    }
+  }
+}

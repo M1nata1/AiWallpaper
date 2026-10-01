@@ -1,0 +1,13 @@
+{
+  "": {
+    "dependencies": "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/release/WallpaperCoreTests.build/WallpaperCoreTests.d",
+    "object": "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/release/WallpaperCoreTests.build/WallpaperCoreTests.o",
+    "swift-dependencies": "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/release/WallpaperCoreTests.build/master.swiftdeps"
+  },
+  "/Users/fadevec/Documents/Personalization/AiWallpaper/Tests/WallpaperCoreTests/WallpaperCoreTests.swift": {
+    "object": "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/release/WallpaperCoreTests.build/WallpaperCoreTests.swift.o",
+    "swiftmodule": "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/release/WallpaperCoreTests.build/WallpaperCoreTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/release/WallpaperCoreTests.build/WallpaperCoreTests.swiftdeps",
+    "diagnostics": "/Users/fadevec/Documents/Personalization/AiWallpaper/.build/arm64-apple-macosx/release/WallpaperCoreTests.build/WallpaperCoreTests.dia"
+  }
+}

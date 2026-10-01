@@ -1,0 +1,100 @@
+/* Import errors */
+"This file type is not supported." = "Этот тип файлов не поддерживается.";
+"The “%@” format is not supported. Use GIF, MP4, MOV, PNG, JPEG, HEIC or WebP." = "Формат «%@» не поддерживается. Используйте GIF, MP4, MOV, PNG, JPEG, HEIC или WebP.";
+"The file could not be read." = "Не удалось прочитать файл.";
+"The file contains no video." = "В файле нет видео.";
+"macOS cannot play this video. Convert it to MP4 or MOV (H.264 or HEVC)." = "macOS не может воспроизвести это видео. Сконвертируйте его в MP4 или MOV (H.264 или HEVC).";
+"Conversion failed: %@" = "Ошибка конвертации: %@";
+"No videos or pictures were found." = "Видео и изображения не найдены.";
+"“%@” could not be added" = "Не удалось добавить «%@»";
+"Some files could not be added" = "Некоторые файлы не удалось добавить";
+
+/* Scaling modes */
+"Fill Screen" = "Заполнить экран";
+"Fit to Screen" = "Вписать в экран";
+"Stretch" = "Растянуть";
+
+/* Playback status */
+"Paused" = "На паузе";
+"Paused while displays sleep" = "Пауза: дисплеи в режиме сна";
+"Paused while the screen is locked" = "Пауза: экран заблокирован";
+"Paused on battery power" = "Пауза: работа от аккумулятора";
+"Paused in Low Power Mode" = "Пауза: режим энергосбережения";
+"No animated wallpaper" = "Живые обои не выбраны";
+"Playing" = "Воспроизводится";
+"%.1f s" = "%.1f с";
+
+/* Library window */
+"Rename Wallpaper" = "Переименовать обои";
+"Name" = "Название";
+"Rename" = "Переименовать";
+"Cancel" = "Отменить";
+"Delete" = "Удалить";
+"Delete “%@”?" = "Удалить «%@»?";
+"The wallpaper will be removed from the library. The original file is not affected." = "Обои будут удалены из библиотеки. Исходный файл останется на месте.";
+"Display:" = "Дисплей:";
+"All Displays" = "Все дисплеи";
+"Resume" = "Продолжить";
+"Pause" = "Пауза";
+"Add…" = "Добавить…";
+"Settings" = "Настройки";
+"Set as Wallpaper" = "Установить как обои";
+"Set for Display" = "Установить на дисплей";
+"Rename…" = "Переименовать…";
+"Show in Finder" = "Показать в Finder";
+"Delete…" = "Удалить…";
+"Same as All Displays" = "Как на всех дисплеях";
+"Turn Off" = "Выключить";
+"Adding “%@”… (%d more in queue)" = "Добавление «%@»… (ещё в очереди: %d)";
+"Adding “%@”…" = "Добавление «%@»…";
+"Current wallpaper" = "Текущие обои";
+"Drop GIFs and videos here" = "Перетащите сюда GIF и видео";
+"MP4, MOV, M4V, GIF, APNG, WebP, HEIC, PNG and JPEG are supported." = "Поддерживаются MP4, MOV, M4V, GIF, APNG, WebP, HEIC, PNG и JPEG.";
+"Choose Files…" = "Выбрать файлы…";
+"Drop to Add" = "Отпустите, чтобы добавить";
+"Choose videos, GIFs or pictures. Folders are searched too." = "Выберите видео, GIF или изображения. Можно выбрать и папку.";
+"Add" = "Добавить";
+
+/* Settings */
+"Playback" = "Воспроизведение";
+"Scaling" = "Масштаб";
+"Speed" = "Скорость";
+"Normal" = "Обычная";
+"Play sound" = "Воспроизводить звук";
+"Volume" = "Громкость";
+"Energy" = "Энергосбережение";
+"Pause when windows cover the desktop" = "Пауза, когда окна закрывают рабочий стол";
+"Pause on battery power" = "Пауза при работе от аккумулятора";
+"Pause in Low Power Mode" = "Пауза в режиме энергосбережения";
+"Playback always stops while displays sleep or the screen is locked." = "Во время сна дисплеев и блокировки экрана воспроизведение всегда останавливается.";
+"General" = "Основные";
+"Open at login" = "Открывать при входе в систему";
+"Use the first frame as the macOS wallpaper" = "Ставить первый кадр как обои macOS";
+"Shown on the lock screen, in Mission Control and when AiWallpaper is not running." = "Виден на экране блокировки, в Mission Control и когда AiWallpaper не запущен.";
+"Library folder" = "Папка библиотеки";
+
+/* Menus */
+"Next Wallpaper" = "Следующие обои";
+"Wallpaper" = "Обои";
+"The library is empty" = "Библиотека пуста";
+"Add Wallpapers…" = "Добавить обои…";
+"Open Library…" = "Открыть библиотеку…";
+"Settings…" = "Настройки…";
+"About AiWallpaper" = "О программе AiWallpaper";
+"Animated wallpapers from videos, GIFs and pictures." = "Живые обои из видео, GIF и изображений.";
+"Hide AiWallpaper" = "Скрыть AiWallpaper";
+"Hide Others" = "Скрыть остальные";
+"Show All" = "Показать все";
+"Quit AiWallpaper" = "Завершить AiWallpaper";
+"File" = "Файл";
+"Close Window" = "Закрыть окно";
+"Edit" = "Правка";
+"Undo" = "Отменить";
+"Redo" = "Повторить";
+"Cut" = "Вырезать";
+"Copy" = "Скопировать";
+"Paste" = "Вставить";
+"Select All" = "Выбрать все";
+"Window" = "Окно";
+"Minimize" = "Свернуть";
+"Zoom" = "Изменить масштаб";
