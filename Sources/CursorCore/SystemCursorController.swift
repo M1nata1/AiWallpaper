@@ -91,6 +91,11 @@ public final class SystemCursorController {
         let backups = (try? FileManager.default.contentsOfDirectory(at: backupURL, includingPropertiesForKeys: nil)) ?? []
         for file in backups where file.pathExtension == "json" {
             guard let backup = try? JSONDecoder().decode(Backup.self, from: Data(contentsOf: file)) else { continue }
+            if backup.absent == true {
+                // The window server had no such cursor before; removing ours brings back its built-in one.
+                _ = CGSRemoveRegisteredCursor(cid, backup.roleID, false)
+                continue
+            }
             let images = backup.imageFiles.compactMap { loadImage(backupURL.appendingPathComponent($0)) }
             guard !images.isEmpty else { continue }
             _ = registerRaw(images: images, roleID: backup.roleID,
@@ -117,7 +122,14 @@ public final class SystemCursorController {
         var array: Unmanaged<CFArray>?
         let err = CGSCopyRegisteredCursorImages(cid, roleID, &size, &hot, &frameCount, &duration, &array)
         // "Copy" returns a +1 reference; takeRetainedValue balances it.
-        guard err == .success, let cfArray = array?.takeRetainedValue() else { return }
+        guard err == .success, let cfArray = array?.takeRetainedValue() else {
+            // Not registered yet (macOS creates some cursors on first use): remember that, so
+            // reset removes ours instead of restoring something.
+            let marker = Backup(roleID: roleID, width: 0, height: 0, hotX: 0, hotY: 0,
+                                frameCount: 0, frameDuration: 0, imageFiles: [], absent: true)
+            try? JSONEncoder().encode(marker).write(to: jsonURL)
+            return
+        }
 
         let images = cgImages(from: cfArray)
         var fileNames: [String] = []
@@ -249,5 +261,7 @@ public final class SystemCursorController {
         var frameCount: Int
         var frameDuration: Double
         var imageFiles: [String]
+        /// The cursor was not registered before it was themed. Optional so older backups decode.
+        var absent: Bool? = nil
     }
 }

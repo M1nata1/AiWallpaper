@@ -132,6 +132,10 @@ final class WindowsCursorInfTests: XCTestCase {
         // "Hand" (the clickable pointer in Windows) themes both link and pointing hand on macOS.
         XCTAssertEqual(CursorRole.roles(forRegistryName: "Hand").map(\.id), ["com.apple.cursor.2", "com.apple.cursor.13"])
         XCTAssertTrue(CursorRole.roles(forRegistryName: "NWPen").isEmpty)
+        // The vertical resize cursor also themes macOS's window-edge one, used by the Dock divider.
+        let vertical = CursorRole.roles(forRegistryName: "SizeNS").map(\.id)
+        XCTAssertEqual(vertical.first, "com.apple.cursor.23")
+        XCTAssertTrue(vertical.contains("com.apple.cursor.32"))
     }
 }
 

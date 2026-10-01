@@ -49,9 +49,12 @@ final class CursorSettings: ObservableObject {
         (theme?.unmatchedFiles ?? []).map { $0.deletingPathExtension().lastPathComponent }
     }
 
-    /// Builds the animated preview of every mapped cursor, once per loaded pack.
+    /// Builds the animated previews, once per loaded pack. One cursor file can theme several
+    /// macOS roles (all the resize variants, say); it is shown once, under its main role.
     private static func makePreviews(_ theme: CursorTheme) -> [CursorPreview] {
-        theme.assignments.map { assignment in
+        var seen: Set<URL> = []
+        return theme.assignments.compactMap { assignment in
+            guard seen.insert(assignment.sourceURL).inserted else { return nil }
             let size = NSSize(width: assignment.decoded.pixelSize.width, height: assignment.decoded.pixelSize.height)
             return CursorPreview(
                 id: assignment.role.id,
@@ -60,6 +63,11 @@ final class CursorSettings: ObservableObject {
                 durations: assignment.decoded.frameDurations
             )
         }
+    }
+
+    /// Number of distinct cursor files in use, which is what people count — not macOS roles.
+    private static func cursorCount(_ theme: CursorTheme) -> Int {
+        Set(theme.assignments.map(\.sourceURL)).count
     }
 
     func chooseFolder() {
@@ -87,7 +95,7 @@ final class CursorSettings: ObservableObject {
                 ? NSLocalizedString("mapped from install.inf", comment: "Cursor status")
                 : NSLocalizedString("mapped by file name", comment: "Cursor status")
             status = String(format: NSLocalizedString("Loaded %d cursors from “%@” (%@).", comment: "Cursor status"),
-                            loaded.assignments.count, loaded.name, source)
+                            Self.cursorCount(loaded), loaded.name, source)
         }
     }
 
@@ -97,7 +105,7 @@ final class CursorSettings: ObservableObject {
         isApplied = controller.isApplied
         if result.failed.isEmpty {
             status = String(format: NSLocalizedString("Applied %d cursors. Move the mouse to see them.", comment: "Cursor status"),
-                            result.applied.count)
+                            Self.cursorCount(theme))
         } else {
             status = String(format: NSLocalizedString("Applied %d cursors; %d could not be set.", comment: "Cursor status"),
                             result.applied.count, result.failed.count)

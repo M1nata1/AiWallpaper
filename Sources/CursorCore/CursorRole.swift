@@ -52,7 +52,35 @@ public struct CursorRole: Hashable, Sendable {
                    windowsRegistryNames: ["SizeNESW"], windowsAliases: ["diagonal2", "sizenesw", "nesw"]),
         CursorRole(id: "com.apple.cursor.40", displayName: "Help",
                    windowsRegistryNames: ["Help"], windowsAliases: ["help"]),
-    ]
+    ] + variants
+
+    /// More macOS cursors themed from the same Windows cursors: one-way resize arrows, the
+    /// window-edge and corner resize cursors macOS 15 uses (and the Dock divider), AppKit's own
+    /// crosshair and the screenshot crosshair (⌘⇧4). Listed after the primary roles so
+    /// `matching` still returns those first.
+    private static let variants: [CursorRole] = {
+        let vertical = (["SizeNS"], ["vertical", "sizens", "ns", "resizenorthsouth"])
+        let horizontal = (["SizeWE"], ["horizontal", "sizewe", "we", "resizeeastwest"])
+        let diagonal1 = (["SizeNWSE"], ["diagonal1", "sizenwse", "nwse"])
+        let diagonal2 = (["SizeNESW"], ["diagonal2", "sizenesw", "nesw"])
+        let crosshair = (["Crosshair", "precisionhair"], ["precision", "crosshair", "cross"])
+        let move = (["SizeAll"], ["move", "sizeall", "drag"])
+        let table: [(Int, String, ([String], [String]))] = [
+            (21, "Resize ↑", vertical), (22, "Resize ↓", vertical),
+            (31, "Window edge ↑", vertical), (32, "Window edge ↕", vertical), (36, "Window edge ↓", vertical),
+            (17, "Resize ←", horizontal), (18, "Resize →", horizontal),
+            (27, "Window edge →", horizontal), (28, "Window edge ↔", horizontal), (38, "Window edge ←", horizontal),
+            (33, "Window corner ↖", diagonal1), (35, "Window corner ↘", diagonal1),
+            (29, "Window corner ↗", diagonal2), (37, "Window corner ↙", diagonal2),
+            (20, "Crosshair (AppKit)", crosshair),
+            (8, "Screenshot crosshair", crosshair),
+            (39, "Move (all directions)", move),
+        ]
+        return table.map { id, name, names in
+            CursorRole(id: "com.apple.cursor.\(id)", displayName: name,
+                       windowsRegistryNames: names.0, windowsAliases: names.1)
+        }
+    }()
 
     /// The first role a file stem belongs to, e.g. "SizeAll" → Move.
     public static func matching(fileStem: String) -> CursorRole? {
