@@ -1,21 +1,21 @@
 #!/bin/bash
 # Builds build/AiWallpaper.app from the Swift package.
 #
-#   scripts/build.sh              release build for this Mac
-#   scripts/build.sh --universal  Apple Silicon + Intel
-#   scripts/build.sh --install    also copy the app to /Applications
+#   scripts/build.sh            universal app: Apple Silicon and Intel
+#   scripts/build.sh --native   only for this Mac's processor; twice as fast, for development
+#   scripts/build.sh --install  also copy the app to /Applications
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
 APP_NAME="AiWallpaper"
 APP="build/$APP_NAME.app"
 INSTALL=0
-ARCH_FLAGS=()
+ARCH_FLAGS=(--arch arm64 --arch x86_64)
 
 for argument in "$@"; do
     case "$argument" in
         --install) INSTALL=1 ;;
-        --universal) ARCH_FLAGS=(--arch arm64 --arch x86_64) ;;
+        --native) ARCH_FLAGS=() ;;
         *) echo "Unknown option: $argument" >&2; exit 1 ;;
     esac
 done

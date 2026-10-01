@@ -10,6 +10,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private let preferences: Preferences
     private let manager: WallpaperManager
     private let importer: ImportCoordinator
+    private let cursorSettings = CursorSettings()
     private var windows: WindowManager!
     private var statusMenu: StatusMenuController?
     private var cancellables: Set<AnyCancellable> = []
@@ -48,6 +49,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                     SettingsView()
                         .environmentObject(preferences)
                         .environmentObject(library)
+                        .environmentObject(cursorSettings)
                 )
             }
         )

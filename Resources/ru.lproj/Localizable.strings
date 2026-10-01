@@ -98,3 +98,24 @@
 "Window" = "Окно";
 "Minimize" = "Свернуть";
 "Zoom" = "Изменить масштаб";
+
+/* Cursor */
+"Apply" = "Применить";
+"Cursor" = "Курсор";
+"Cursor pack" = "Набор курсоров";
+"Choose Folder…" = "Выбрать папку…";
+"Change…" = "Изменить…";
+"No macOS match for: %@" = "Нет аналога в macOS: %@";
+"Reset to Default" = "Сбросить";
+"Pointer size is set in System Settings → Accessibility → Pointer." = "Размер указателя задаётся в Системных настройках → Универсальный доступ → Указатель.";
+"Replaces the pointer for the whole system using a private macOS interface. If the pointer ever looks wrong, click Reset — or log out and back in, which always restores it." = "Заменяет указатель во всей системе через приватный интерфейс macOS. Если указатель когда-нибудь выглядит неправильно, нажмите «Сбросить» — или выйдите из системы и войдите снова, это всегда всё восстанавливает.";
+"Choose" = "Выбрать";
+"Choose a folder of cursors (.ani, .cur, .png)." = "Выберите папку с курсорами (.ani, .cur, .png).";
+"No usable cursors were found in that folder." = "В этой папке не найдено подходящих курсоров.";
+"Loaded %d cursors from “%@” (%@)." = "Загружено курсоров: %d из «%@» (%@).";
+"mapped from install.inf" = "соответствие из install.inf";
+"mapped by file name" = "соответствие по именам файлов";
+"“%@” is applied." = "«%@» применён.";
+"Applied %d cursors. Move the mouse to see them." = "Применено курсоров: %d. Подвигайте мышь, чтобы увидеть.";
+"Applied %d cursors; %d could not be set." = "Применено курсоров: %d; не удалось установить: %d.";
+"System cursors restored." = "Системные курсоры восстановлены.";

@@ -1,0 +1,74 @@
+import Foundation
+
+/// A macOS pointer role that can be themed, with the private CGS identifier the window server
+/// knows it by, the Windows registry cursor names that map onto it (from an install.inf), and
+/// the Windows file-name stems used as a fallback when there is no .inf.
+public struct CursorRole: Hashable, Sendable {
+    /// CGS cursor identifier, e.g. "com.apple.coregraphics.Arrow".
+    public let id: String
+    public let displayName: String
+    /// Windows "Control Panel\Cursors" registry value names that map here (case-insensitive).
+    public let windowsRegistryNames: [String]
+    /// Lowercased Windows cursor file stems that map here, used when no install.inf is present.
+    public let windowsAliases: [String]
+
+    public init(id: String, displayName: String, windowsRegistryNames: [String], windowsAliases: [String]) {
+        self.id = id
+        self.displayName = displayName
+        self.windowsRegistryNames = windowsRegistryNames
+        self.windowsAliases = windowsAliases
+    }
+
+    public static let all: [CursorRole] = [
+        CursorRole(id: "com.apple.coregraphics.Arrow", displayName: "Pointer",
+                   windowsRegistryNames: ["Arrow"], windowsAliases: ["normal", "pointer", "arrow", "default"]),
+        CursorRole(id: "com.apple.coregraphics.IBeam", displayName: "Text (I-beam)",
+                   windowsRegistryNames: ["IBeam"], windowsAliases: ["text", "ibeam", "beam"]),
+        CursorRole(id: "com.apple.cursor.2", displayName: "Link",
+                   windowsRegistryNames: ["Hand"], windowsAliases: ["link", "hand", "pointinghand"]),
+        CursorRole(id: "com.apple.cursor.13", displayName: "Pointing hand",
+                   windowsRegistryNames: ["Hand"], windowsAliases: ["link", "hand", "pointinghand"]),
+        CursorRole(id: "com.apple.coregraphics.Wait", displayName: "Busy (spinner)",
+                   windowsRegistryNames: ["Wait"], windowsAliases: ["busy", "wait"]),
+        CursorRole(id: "com.apple.cursor.4", displayName: "Working in background",
+                   windowsRegistryNames: ["AppStarting"], windowsAliases: ["working", "appstarting", "work"]),
+        CursorRole(id: "com.apple.coregraphics.Move", displayName: "Move",
+                   windowsRegistryNames: ["SizeAll"], windowsAliases: ["move", "sizeall", "drag"]),
+        CursorRole(id: "com.apple.cursor.11", displayName: "Closed hand",
+                   windowsRegistryNames: ["SizeAll"], windowsAliases: ["move", "sizeall", "drag", "grab"]),
+        CursorRole(id: "com.apple.cursor.12", displayName: "Open hand",
+                   windowsRegistryNames: ["SizeAll"], windowsAliases: ["move", "sizeall", "drag", "grab"]),
+        CursorRole(id: "com.apple.cursor.7", displayName: "Crosshair",
+                   windowsRegistryNames: ["Crosshair", "precisionhair"], windowsAliases: ["precision", "crosshair", "cross"]),
+        CursorRole(id: "com.apple.cursor.3", displayName: "Not allowed",
+                   windowsRegistryNames: ["No"], windowsAliases: ["unavailable", "no", "forbidden", "notallowed"]),
+        CursorRole(id: "com.apple.cursor.23", displayName: "Resize ↕",
+                   windowsRegistryNames: ["SizeNS"], windowsAliases: ["vertical", "sizens", "ns", "resizenorthsouth"]),
+        CursorRole(id: "com.apple.cursor.19", displayName: "Resize ↔",
+                   windowsRegistryNames: ["SizeWE"], windowsAliases: ["horizontal", "sizewe", "we", "resizeeastwest"]),
+        CursorRole(id: "com.apple.cursor.34", displayName: "Resize ⤡",
+                   windowsRegistryNames: ["SizeNWSE"], windowsAliases: ["diagonal1", "sizenwse", "nwse"]),
+        CursorRole(id: "com.apple.cursor.30", displayName: "Resize ⤢",
+                   windowsRegistryNames: ["SizeNESW"], windowsAliases: ["diagonal2", "sizenesw", "nesw"]),
+        CursorRole(id: "com.apple.cursor.40", displayName: "Help",
+                   windowsRegistryNames: ["Help"], windowsAliases: ["help"]),
+    ]
+
+    /// The first role a file stem belongs to, e.g. "SizeAll" → Move.
+    public static func matching(fileStem: String) -> CursorRole? {
+        matchingRoles(fileStem: fileStem).first
+    }
+
+    /// Every role a file stem maps to. One Windows cursor can cover several macOS roles — e.g.
+    /// "Link" themes both the link arrow and the pointing hand.
+    public static func matchingRoles(fileStem: String) -> [CursorRole] {
+        let key = fileStem.lowercased().replacingOccurrences(of: " ", with: "")
+        return all.filter { $0.windowsAliases.contains(key) }
+    }
+
+    /// Every role a Windows registry cursor name (from install.inf) maps to.
+    public static func roles(forRegistryName name: String) -> [CursorRole] {
+        let key = name.lowercased()
+        return all.filter { $0.windowsRegistryNames.contains { $0.lowercased() == key } }
+    }
+}

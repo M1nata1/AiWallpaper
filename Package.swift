@@ -14,16 +14,39 @@ let package = Package(
             name: "WallpaperCore",
             path: "Sources/WallpaperCore"
         ),
+        // Thin C wrapper over the private CoreGraphics cursor API (CGS).
+        .target(
+            name: "CGSCursor",
+            path: "Sources/CGSCursor",
+            linkerSettings: [.linkedFramework("ApplicationServices")]
+        ),
+        // Windows .ani/.cur decoding and the system-wide cursor theme engine.
+        .target(
+            name: "CursorCore",
+            dependencies: ["CGSCursor"],
+            path: "Sources/CursorCore"
+        ),
         // The menu bar app: desktop windows, playback engine and SwiftUI screens.
         .executableTarget(
             name: "AiWallpaper",
-            dependencies: ["WallpaperCore"],
+            dependencies: ["WallpaperCore", "CursorCore"],
             path: "Sources/AiWallpaper"
+        ),
+        // Command-line helper to apply or reset a cursor theme, reusing the app's engine.
+        .executableTarget(
+            name: "cursorctl",
+            dependencies: ["CursorCore"],
+            path: "Sources/cursorctl"
         ),
         .testTarget(
             name: "WallpaperCoreTests",
             dependencies: ["WallpaperCore"],
             path: "Tests/WallpaperCoreTests"
-        )
+        ),
+        .testTarget(
+            name: "CursorCoreTests",
+            dependencies: ["CursorCore"],
+            path: "Tests/CursorCoreTests"
+        ),
     ]
 )

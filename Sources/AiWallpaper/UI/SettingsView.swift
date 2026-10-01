@@ -43,6 +43,8 @@ struct SettingsView: View {
                     .foregroundStyle(.secondary)
             }
 
+            CursorSettingsSection()
+
             Section("General") {
                 Toggle("Open at login", isOn: $opensAtLogin)
                     .onChange(of: opensAtLogin) { enabled in
@@ -65,7 +67,7 @@ struct SettingsView: View {
             }
         }
         .formStyle(.grouped)
-        .frame(width: 500, height: 600)
+        .frame(width: 500, height: 720)
     }
 
     private func updateLoginItem(_ enabled: Bool) {

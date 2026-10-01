@@ -14,12 +14,14 @@
 
 ## Сборка и установка
 
-Нужен Xcode 15 или новее (или Command Line Tools со Swift 5.9+), macOS 13 Ventura или новее.
+Нужен Xcode 15 или новее и macOS 13 Ventura или новее. С одними Command Line Tools (Swift 5.9+) универсальная сборка недоступна — используйте `--native`.
+
+Готовое приложение универсальное: macOS сама запускает версию для своего процессора — Apple Silicon или Intel.
 
 ```bash
-scripts/build.sh              # собрать build/AiWallpaper.app
+scripts/build.sh              # собрать build/AiWallpaper.app для Apple Silicon и Intel
 scripts/build.sh --install    # собрать и скопировать в /Applications
-scripts/build.sh --universal  # Apple Silicon + Intel
+scripts/build.sh --native     # только для процессора этого Mac: вдвое быстрее, для разработки
 swift test                    # тесты импорта и конвертации
 ```
 
@@ -59,4 +61,4 @@ log stream --predicate 'subsystem == "com.fadevec.AiWallpaper"'
 ## Ограничения
 
 - WebM, MKV и AVI macOS не воспроизводит штатно — сконвертируйте в MP4 (H.264 или HEVC), например через HandBrake.
-- Звук играет только на одном дисплее — на первом, где показано видео со звуком.
+
