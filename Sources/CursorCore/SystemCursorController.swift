@@ -64,12 +64,13 @@ public final class SystemCursorController {
         var result = ApplyResult(applied: [], failed: [])
         for assignment in theme.assignments {
             backUpIfNeeded(roleID: assignment.role.id)
-            if register(images: assignment.decoded.frames,
+            let animation = Self.fitToFrameLimit(assignment.decoded.frames, durations: assignment.decoded.frameDurations)
+            if register(images: animation.frames,
                         roleID: assignment.role.id,
                         pixelSize: assignment.decoded.pixelSize,
                         hotSpotPixels: assignment.decoded.hotSpot,
-                        frameCount: assignment.decoded.frames.count,
-                        frameDuration: averageDuration(assignment.decoded.frameDurations),
+                        frameCount: animation.frames.count,
+                        frameDuration: CGFloat(animation.frameDuration),
                         pointSize: pointSize) {
                 result.applied.append(assignment.role.displayName)
             } else {
@@ -202,10 +203,33 @@ public final class SystemCursorController {
         return CGImageSourceCreateImageAtIndex(source, 0, nil)
     }
 
-    private func averageDuration(_ durations: [Double]) -> CGFloat {
-        let nonZero = durations.filter { $0 > 0 }
-        guard !nonZero.isEmpty else { return 0 }
-        return CGFloat(nonZero.reduce(0, +) / Double(nonZero.count))
+    /// The window server rejects animated cursors with more than 24 frames (error 1000).
+    nonisolated static let maximumFrameCount = 24
+
+    /// Prepares an animation for registration, which takes one duration for all frames. Longer
+    /// animations are resampled evenly over time down to `maximumFrameCount` frames, keeping the
+    /// loop length; shorter ones keep their frames and use the average duration.
+    nonisolated static func fitToFrameLimit(_ frames: [CGImage], durations: [Double]) -> (frames: [CGImage], frameDuration: Double) {
+        let timed = durations.prefix(frames.count).map { max($0, 0) }
+        let total = timed.reduce(0, +)
+        guard frames.count > maximumFrameCount, total > 0, timed.count == frames.count else {
+            let nonZero = timed.filter { $0 > 0 }
+            return (Array(frames.prefix(maximumFrameCount)), nonZero.isEmpty ? 0 : nonZero.reduce(0, +) / Double(nonZero.count))
+        }
+        let count = maximumFrameCount
+        var sampled: [CGImage] = []
+        var index = 0
+        var elapsed = 0.0
+        for step in 0..<count {
+            // Take the frame on screen at the middle of each new, equal time slot.
+            let time = (Double(step) + 0.5) * total / Double(count)
+            while index < frames.count - 1, elapsed + timed[index] <= time {
+                elapsed += timed[index]
+                index += 1
+            }
+            sampled.append(frames[index])
+        }
+        return (sampled, total / Double(count))
     }
 
     private func sanitized(_ roleID: String) -> String {

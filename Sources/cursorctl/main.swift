@@ -4,17 +4,31 @@ import Foundation
 // cursorctl apply "<folder>" [pointSize]   – theme the system cursors from a folder
 // cursorctl reset                           – restore the system cursors
 // cursorctl status                          – print what is applied
+// cursorctl check "<folder>"                – load a folder and print the mapping (no changes)
 
 @MainActor
 func run() -> Int32 {
     let args = CommandLine.arguments
     let controller = SystemCursorController()
     guard args.count >= 2 else {
-        print("usage: cursorctl apply <folder> [size] | reset | status")
+        print("usage: cursorctl apply <folder> [size] | reset | status | check <folder>")
         return 2
     }
 
     switch args[1] {
+    case "check":
+        guard args.count >= 3 else { print("check needs a folder path"); return 2 }
+        let theme = CursorTheme.load(fromFolder: URL(fileURLWithPath: args[2]))
+        print("source: \(theme.usedInf ? "install.inf" : "file names")")
+        print("mapped \(theme.assignments.count) roles:")
+        for a in theme.assignments {
+            print("  \(a.role.displayName.padding(toLength: 24, withPad: " ", startingAt: 0)) ← \(a.sourceURL.lastPathComponent) [\(a.decoded.frames.count) frame(s), \(Int(a.decoded.pixelSize.width))px]")
+        }
+        let unmatched = theme.unmatchedFiles.map { $0.lastPathComponent }
+        if !unmatched.isEmpty { print("no macOS match: \(unmatched.joined(separator: ", "))") }
+        return theme.assignments.isEmpty ? 1 : 0
+
+
     case "apply":
         guard args.count >= 3 else { print("apply needs a folder path"); return 2 }
         let folder = URL(fileURLWithPath: args[2])

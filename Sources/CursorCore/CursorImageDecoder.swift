@@ -115,37 +115,62 @@ public enum CursorImageDecoder {
     // MARK: - .cur / .ico
 
     /// Decodes a single-image ICONDIR blob. `.cur` carries the hotspot in its directory entry;
-    /// `.ico` has none (hotspot 0,0). ImageIO has no CUR reader, so the two bytes that mark the
-    /// file as a cursor are rewritten to mark it as an icon, which ImageIO does read.
+    /// `.ico` has none (hotspot 0,0). A frame may hold several resolutions (HD packs store e.g.
+    /// 32 and 48 px); the largest is used, with its own hotspot. ImageIO has no CUR reader, so a
+    /// BMP image is re-wrapped as a single-image `.ico`, which it does read; a PNG image (used
+    /// for large sizes) is a complete PNG file and is decoded directly.
     static func decodeCUR(_ bytes: [UInt8]) -> (image: CGImage, hotSpot: CGPoint)? {
-        guard bytes.count >= 22, read16(bytes, 0) == 0, read16(bytes, 4) >= 1 else { return nil }
+        guard bytes.count >= 22, read16(bytes, 0) == 0 else { return nil }
         let type = read16(bytes, 2)
-        guard type == 1 || type == 2 else { return nil }
+        let count = read16(bytes, 4)
+        guard type == 1 || type == 2, count >= 1, 6 + 16 * count <= bytes.count else { return nil }
 
-        let entry = 6
-        let hotX = read16(bytes, entry + 4)
-        let hotY = read16(bytes, entry + 6)
-        let imageOffset = read32(bytes, entry + 12)
-        var bitCount = 32
-        if imageOffset + 16 <= bytes.count, read32(bytes, imageOffset) == 40 {
-            bitCount = read16(bytes, imageOffset + 14) // BITMAPINFOHEADER.biBitCount
+        // Pick the largest image in the directory.
+        var best = 0
+        var bestWidth = -1
+        for index in 0..<count {
+            let width = bytes[6 + 16 * index] == 0 ? 256 : Int(bytes[6 + 16 * index])
+            if width > bestWidth {
+                best = index
+                bestWidth = width
+            }
         }
+        let entry = 6 + 16 * best
+        let hotSpot = type == 2 ? CGPoint(x: read16(bytes, entry + 4), y: read16(bytes, entry + 6)) : .zero
+        let imageSize = read32(bytes, entry + 8)
+        let imageOffset = read32(bytes, entry + 12)
+        guard imageSize > 0, imageOffset >= 0, imageOffset + imageSize <= bytes.count else { return nil }
+        let payload = Array(bytes[imageOffset..<(imageOffset + imageSize)])
 
-        var ico = bytes
-        ico[2] = 1; ico[3] = 0 // ICONDIR.idType: cursor(2) → icon(1)
-        if type == 2 {
-            // The CUR hotspot fields overlap the ICO planes/bitCount fields; set valid icon values.
-            ico[entry + 4] = 1; ico[entry + 5] = 0
-            ico[entry + 6] = UInt8(bitCount & 0xff); ico[entry + 7] = UInt8((bitCount >> 8) & 0xff)
+        let isPNG = payload.starts(with: [0x89, 0x50, 0x4E, 0x47])
+        let data: Data
+        let hint: String
+        if isPNG {
+            data = Data(payload)
+            hint = "public.png"
+        } else {
+            var bitCount = 32
+            if payload.count >= 16, read32(payload, 0) == 40 {
+                bitCount = read16(payload, 14) // BITMAPINFOHEADER.biBitCount
+            }
+            var ico: [UInt8] = [0, 0, 1, 0, 1, 0]                     // ICONDIR: icon, one image
+            ico += Array(bytes[entry..<(entry + 4)])                  // width, height, colours, reserved
+            ico += [1, 0, UInt8(bitCount & 0xff), UInt8((bitCount >> 8) & 0xff)] // planes, bit count
+            ico += littleEndian32(imageSize) + littleEndian32(22)     // size, offset (6 + 16)
+            data = Data(ico + payload)
+            hint = "com.microsoft.ico"
         }
 
         guard let source = CGImageSourceCreateWithData(
-            Data(ico) as CFData,
-            [kCGImageSourceTypeIdentifierHint: "com.microsoft.ico"] as CFDictionary
+            data as CFData, [kCGImageSourceTypeIdentifierHint: hint] as CFDictionary
         ), let image = CGImageSourceCreateImageAtIndex(source, 0, nil) else {
             return nil
         }
-        return (image, type == 2 ? CGPoint(x: hotX, y: hotY) : .zero)
+        return (image, hotSpot)
+    }
+
+    private static func littleEndian32(_ value: Int) -> [UInt8] {
+        [UInt8(value & 0xff), UInt8((value >> 8) & 0xff), UInt8((value >> 16) & 0xff), UInt8((value >> 24) & 0xff)]
     }
 
     // MARK: - Byte helpers (little-endian)

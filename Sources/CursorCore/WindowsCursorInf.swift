@@ -2,21 +2,28 @@ import Foundation
 
 /// Parses a Windows cursor-scheme `install.inf` to learn, authoritatively, which cursor file
 /// belongs to which pointer role — instead of guessing from file names. This is the standard
-/// format every Windows cursor pack ships, so it makes the mapping work for any pack.
+/// format Windows cursor packs ship, so it makes the mapping work for any pack.
 ///
-/// The `[Wreg]` section maps a registry value name to a variable:
-///     HKCU,"Control Panel\Cursors",Arrow,0x00020000,"%10%\%CUR_DIR%\%pointer%"
-/// and `[Strings]` resolves the variable to a file:
-///     pointer = "Normal.ani"
+/// Two layouts exist, and packs use one or the other:
+///  • Per-role `[Wreg]` lines, each naming a registry role explicitly:
+///       HKCU,"Control Panel\Cursors",Arrow,0x00020000,"%10%\%CUR_DIR%\%pointer%"
+///  • A single `[...Schemes]` line listing the files in the fixed Windows order:
+///       HKCU,"Control Panel\Cursors\Schemes","%NAME%",,"...\%pointer%,...\%help%,..."
+/// `[Strings]` resolves the `%variables%` to file names in both cases.
 public enum WindowsCursorInf {
     public struct Entry: Equatable {
         public let registryName: String
         public let fileName: String
     }
 
+    /// The fixed order of the Windows "Schemes" cursor list.
+    static let schemeOrder = [
+        "Arrow", "Help", "AppStarting", "Wait", "Crosshair", "IBeam", "NWPen", "No",
+        "SizeNS", "SizeWE", "SizeNWSE", "SizeNESW", "SizeAll", "UpArrow", "Hand", "Pin", "Person",
+    ]
+
     public static func find(in folder: URL) -> URL? {
         let files = (try? FileManager.default.contentsOfDirectory(at: folder, includingPropertiesForKeys: nil)) ?? []
-        // A cursor scheme installer is conventionally install.inf; otherwise take any .inf.
         return files.first { $0.lastPathComponent.lowercased() == "install.inf" }
             ?? files.first { $0.pathExtension.lowercased() == "inf" }
     }
@@ -32,8 +39,8 @@ public enum WindowsCursorInf {
 
     public static func parse(_ text: String) -> [Entry] {
         var strings: [String: String] = [:]
-        // (registryName, lastPathComponent) collected first, resolved after [Strings] is known.
-        var rawEntries: [(name: String, token: String)] = []
+        var wregRaw: [(name: String, token: String)] = []   // explicit per-role lines
+        var schemeRaw: String?                               // the comma-separated Schemes list
         var section = ""
 
         for rawLine in text.components(separatedBy: .newlines) {
@@ -54,34 +61,46 @@ public enum WindowsCursorInf {
                 continue
             }
 
-            // Registry cursor lines: HKCU,"Control Panel\Cursors",<name>,<flags>,"<value>"
             let fields = splitFields(trimmed)
             guard fields.count >= 5 else { continue }
-            guard unquote(fields[1]).caseInsensitiveCompare("Control Panel\\Cursors") == .orderedSame else { continue }
-            let name = unquote(fields[2])
-            guard !name.isEmpty else { continue } // the default "scheme name" line has no value name
-            let token = unquote(fields[4]).components(separatedBy: "\\").last ?? ""
-            if !token.isEmpty { rawEntries.append((name, token)) }
+            let regPath = unquote(fields[1])
+            if regPath.caseInsensitiveCompare("Control Panel\\Cursors") == .orderedSame {
+                let name = unquote(fields[2])
+                guard !name.isEmpty else { continue } // the default "scheme name" line has no value name
+                let token = unquote(fields[4]).components(separatedBy: "\\").last ?? ""
+                if !token.isEmpty { wregRaw.append((name, token)) }
+            } else if regPath.caseInsensitiveCompare("Control Panel\\Cursors\\Schemes") == .orderedSame {
+                schemeRaw = unquote(fields[4])
+            }
         }
 
-        var entries: [Entry] = []
-        for raw in rawEntries {
-            let fileName: String
-            if raw.token.hasPrefix("%"), raw.token.hasSuffix("%"), raw.token.count > 2 {
-                let key = raw.token.dropFirst().dropLast().lowercased()
-                guard let resolved = strings[key] else { continue }
-                fileName = resolved
-            } else {
-                fileName = raw.token // a literal file name
-            }
-            if isCursorFile(fileName) {
-                entries.append(Entry(registryName: raw.name, fileName: fileName))
+        if !wregRaw.isEmpty {
+            return wregRaw.compactMap { entry(registryName: $0.name, token: $0.token, strings: strings) }
+        }
+        if let schemeRaw {
+            // Each item is a path like "%10%\%CUR_DIR%\%pointer%"; map by position to a role.
+            return schemeRaw.components(separatedBy: ",").enumerated().compactMap { index, item in
+                guard index < schemeOrder.count else { return nil }
+                let token = item.components(separatedBy: "\\").last?.trimmingCharacters(in: .whitespaces) ?? ""
+                return entry(registryName: schemeOrder[index], token: token, strings: strings)
             }
         }
-        return entries
+        return []
     }
 
     // MARK: - Helpers
+
+    private static func entry(registryName: String, token: String, strings: [String: String]) -> Entry? {
+        let fileName: String
+        if token.hasPrefix("%"), token.hasSuffix("%"), token.count > 2 {
+            guard let resolved = strings[token.dropFirst().dropLast().lowercased()] else { return nil }
+            fileName = resolved
+        } else {
+            fileName = token // a literal file name
+        }
+        guard isCursorFile(fileName) else { return nil }
+        return Entry(registryName: registryName, fileName: fileName)
+    }
 
     private static func isCursorFile(_ name: String) -> Bool {
         ["ani", "cur", "ico"].contains((name as NSString).pathExtension.lowercased())

@@ -28,8 +28,35 @@ final class CursorImageDecoderTests: XCTestCase {
         XCTAssertEqual(decoded.frameDurations, Array(repeating: 5.0 / 60, count: decoded.frames.count))
     }
 
+    func testPicksTheLargestResolutionInAFrame() throws {
+        // HD packs store several sizes per frame; the largest wins, with its own hotspot.
+        let cur = CursorFixtures.multiCur(entries: [(side: 32, hotspot: (7, 3)), (side: 48, hotspot: (11, 5))])
+        let decoded = try XCTUnwrap(CursorImageDecoder.decode(data: Data(cur)))
+        XCTAssertEqual(decoded.pixelSize, CGSize(width: 48, height: 48))
+        XCTAssertEqual(decoded.hotSpot, CGPoint(x: 11, y: 5))
+    }
+
     func testRejectsGarbage() {
         XCTAssertNil(CursorImageDecoder.decode(data: Data([0, 1, 2, 3, 4, 5, 6, 7])))
+    }
+}
+
+final class FrameLimitTests: XCTestCase {
+    func testLongAnimationsAreResampledToTheFrameLimit() {
+        // e.g. Crystal Clear's pointer: 60 steps, which the window server would reject.
+        let frames = (0..<60).map { _ in CursorFixtures.tinyImage() }
+        let fitted = SystemCursorController.fitToFrameLimit(frames, durations: Array(repeating: 1.0 / 30, count: 60))
+        XCTAssertEqual(fitted.frames.count, SystemCursorController.maximumFrameCount)
+        XCTAssertEqual(fitted.frameDuration, 2.0 / 24, accuracy: 0.0001, "the 2 s loop length is kept")
+        XCTAssertTrue(fitted.frames.first === frames[1])
+        XCTAssertTrue(fitted.frames.last === frames[58])
+    }
+
+    func testShortAnimationsKeepTheirFrames() {
+        let frames = (0..<8).map { _ in CursorFixtures.tinyImage() }
+        let fitted = SystemCursorController.fitToFrameLimit(frames, durations: Array(repeating: 0.1, count: 8))
+        XCTAssertEqual(fitted.frames.count, 8)
+        XCTAssertEqual(fitted.frameDuration, 0.1, accuracy: 0.0001)
     }
 }
 
@@ -77,6 +104,28 @@ final class WindowsCursorInfTests: XCTestCase {
         XCTAssertEqual(entries.count, 4)
     }
 
+    func testParsesSchemesListWhenNoWregSection() {
+        // Some packs only ship the ordered "Schemes" list, with no per-role [Wreg] lines.
+        let files = "pointer,help,work,busy,cross,text,hand,na,vert,horz,d1,d2,move,alt,link"
+        let paths = files.components(separatedBy: ",").map { "%10%\\%CUR_DIR%\\%\($0)%" }.joined(separator: ",")
+        var strings = ""
+        for name in files.components(separatedBy: ",") { strings += "\(name) = \"\(name.uppercased()).ani\"\n" }
+        let inf = """
+        [Scheme.Reg]
+        HKCU,"Control Panel\\Cursors\\Schemes","%SCHEME_NAME%",,"\(paths)"
+
+        [Strings]
+        \(strings)
+        """
+        let entries = WindowsCursorInf.parse(inf)
+        func file(_ reg: String) -> String? { entries.first { $0.registryName == reg }?.fileName }
+        XCTAssertEqual(file("Arrow"), "POINTER.ani")   // position 0
+        XCTAssertEqual(file("IBeam"), "TEXT.ani")      // position 5
+        XCTAssertEqual(file("NWPen"), "HAND.ani")      // position 6 (handwriting)
+        XCTAssertEqual(file("SizeAll"), "MOVE.ani")    // position 12
+        XCTAssertEqual(file("Hand"), "LINK.ani")       // position 14 (clickable link)
+    }
+
     func testRegistryNamesMapToMacRoles() {
         XCTAssertEqual(CursorRole.roles(forRegistryName: "Arrow").map(\.id), ["com.apple.coregraphics.Arrow"])
         XCTAssertEqual(CursorRole.roles(forRegistryName: "Wait").map(\.id), ["com.apple.coregraphics.Wait"])
@@ -120,9 +169,51 @@ final class RealCursorPackTests: XCTestCase {
 // MARK: - Fixtures
 
 enum CursorFixtures {
+    /// A distinct 2×2 image, for tests that only care about frame identity.
+    static func tinyImage() -> CGImage {
+        let context = CGContext(
+            data: nil, width: 2, height: 2, bitsPerComponent: 8, bytesPerRow: 0,
+            space: CGColorSpace(name: CGColorSpace.sRGB)!, bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
+        )!
+        return context.makeImage()!
+    }
+
+    /// A `.cur` holding several resolutions of the same frame, like HD cursor packs.
+    static func multiCur(entries: [(side: Int, hotspot: (Int, Int))]) -> [UInt8] {
+        let payloads = entries.map { dib(side: $0.side) }
+        var header: [UInt8] = []
+        appendU16(&header, 0)
+        appendU16(&header, 2)            // type: cursor
+        appendU16(&header, entries.count)
+        var offset = 6 + 16 * entries.count
+        for (entry, payload) in zip(entries, payloads) {
+            header += [UInt8(entry.side), UInt8(entry.side), 0, 0]
+            appendU16(&header, entry.hotspot.0); appendU16(&header, entry.hotspot.1)
+            appendU32(&header, payload.count)
+            appendU32(&header, offset)
+            offset += payload.count
+        }
+        return header + payloads.flatMap { $0 }
+    }
+
     /// A minimal 32-bit BMP `.cur` of a solid square with the given hotspot. ImageIO's icon
     /// reader rejects very small frames, so tests use a realistic 32×32.
     static func cur(side n: Int, hotspot: (Int, Int)) -> [UInt8] {
+        let dib = dib(side: n)
+
+        var cur: [UInt8] = []
+        appendU16(&cur, 0)               // reserved
+        appendU16(&cur, 2)               // type: cursor
+        appendU16(&cur, 1)               // count
+        cur += [UInt8(n), UInt8(n), 0, 0]
+        appendU16(&cur, hotspot.0); appendU16(&cur, hotspot.1)
+        appendU32(&cur, dib.count)
+        appendU32(&cur, 22)              // image offset (6 + 16)
+        return cur + dib
+    }
+
+    /// The BMP image data of a cursor frame: header, BGRA pixels, AND mask.
+    private static func dib(side n: Int) -> [UInt8] {
         var dib: [UInt8] = []
         appendU32(&dib, 40)              // biSize
         appendU32(&dib, n)               // biWidth
@@ -136,16 +227,7 @@ enum CursorFixtures {
         for _ in 0..<(n * n) { dib += [40, 40, 220, 255] } // BGRA, opaque
         let maskRowBytes = ((n + 31) / 32) * 4
         dib += [UInt8](repeating: 0, count: maskRowBytes * n) // AND mask: fully opaque
-
-        var cur: [UInt8] = []
-        appendU16(&cur, 0)               // reserved
-        appendU16(&cur, 2)               // type: cursor
-        appendU16(&cur, 1)               // count
-        cur += [UInt8(n), UInt8(n), 0, 0]
-        appendU16(&cur, hotspot.0); appendU16(&cur, hotspot.1)
-        appendU32(&cur, dib.count)
-        appendU32(&cur, 22)              // image offset (6 + 16)
-        return cur + dib
+        return dib
     }
 
     /// A RIFF ACON animation wrapping `rates.count` (or 3) copies of a `.cur` frame.
