@@ -33,6 +33,7 @@ final class WallpaperView: NSView {
     private let imageLayer = CALayer()
     private var player: AVQueuePlayer?
     private var looper: AVPlayerLooper?
+    private var looperStatus: NSKeyValueObservation?
 
     override init(frame: NSRect) {
         super.init(frame: frame)
@@ -72,7 +73,14 @@ final class WallpaperView: NSView {
         // A wallpaper must never keep the display awake or show up as an AirPlay source.
         player.preventsDisplaySleepDuringVideoPlayback = false
         player.allowsExternalPlayback = false
-        looper = AVPlayerLooper(player: player, templateItem: AVPlayerItem(url: url))
+        let looper = AVPlayerLooper(player: player, templateItem: AVPlayerItem(url: url))
+        looperStatus = looper.observe(\.status) { looper, _ in
+            if looper.status == .failed {
+                let reason = looper.error?.localizedDescription ?? "unknown error"
+                Log.playback.error("Cannot play \(url.lastPathComponent, privacy: .public): \(reason, privacy: .public)")
+            }
+        }
+        self.looper = looper
         self.player = player
         playerLayer.player = player
         playerLayer.isHidden = false
@@ -88,6 +96,7 @@ final class WallpaperView: NSView {
     }
 
     func clear() {
+        looperStatus = nil
         looper?.disableLooping()
         looper = nil
         player?.pause()

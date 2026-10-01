@@ -217,10 +217,13 @@ final class WallpaperManager: NSObject, ObservableObject {
 
     /// Starts or stops every player according to the current state of the Mac.
     func updatePlayback() {
-        pauseReason = currentPauseReason()
+        let reason = currentPauseReason()
+        if reason != pauseReason {
+            pauseReason = reason
+        }
         for screen in screens.values {
             let visible = !preferences.pauseWhenCovered || screen.isVisibleOnScreen
-            screen.view.setPlaying(pauseReason == nil && visible, rate: Float(preferences.playbackRate))
+            screen.setPlaying(pauseReason == nil && visible, rate: Float(preferences.playbackRate))
         }
     }
 
@@ -338,6 +341,7 @@ final class ScreenWallpaper: NSObject {
     let view: WallpaperView
     private let window: WallpaperWindow
     private(set) var item: Wallpaper?
+    private var isPlaying = false
     private weak var manager: WallpaperManager?
 
     init(screen: NSScreen, displayID: String, manager: WallpaperManager) {
@@ -366,9 +370,18 @@ final class ScreenWallpaper: NSObject {
         window.setFrame(screen.frame, display: true)
     }
 
+    func setPlaying(_ playing: Bool, rate: Float) {
+        if playing != isPlaying, let item, item.kind == .video {
+            Log.playback.info("\(playing ? "Playing" : "Paused", privacy: .public) “\(item.name, privacy: .public)” on \(self.window.screen?.localizedName ?? self.displayID, privacy: .public)")
+        }
+        isPlaying = playing
+        view.setPlaying(playing, rate: rate)
+    }
+
     func show(_ newItem: Wallpaper?, from library: WallpaperLibrary) {
         guard newItem?.id != item?.id else { return }
         item = newItem
+        isPlaying = false
         guard let newItem else {
             view.clear()
             window.orderOut(nil)

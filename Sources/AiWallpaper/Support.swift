@@ -1,6 +1,12 @@
 import AppKit
+import os
 import ServiceManagement
 import WallpaperCore
+
+/// View with: log stream --predicate 'subsystem == "com.fadevec.AiWallpaper"'
+enum Log {
+    static let playback = Logger(subsystem: "com.fadevec.AiWallpaper", category: "playback")
+}
 
 enum LaunchAtLogin {
     static var isEnabled: Bool {
