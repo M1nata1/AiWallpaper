@@ -35,6 +35,17 @@ final class WallpaperView: NSView {
     private var looper: AVPlayerLooper?
     private var looperStatus: NSKeyValueObservation?
 
+    private var videoURL: URL?
+    private var loadTask: Task<Void, Never>?
+    private var videoHasAudio = false
+    private var playerHasAudio = false
+
+    // Requested playback state, applied whenever a player becomes available.
+    private var isPlaying = false
+    private var rate: Float = 1
+    private var isMuted = true
+    private var volume: Float = 1
+
     override init(frame: NSRect) {
         super.init(frame: frame)
         let root = CALayer()
@@ -68,22 +79,9 @@ final class WallpaperView: NSView {
 
     func showVideo(at url: URL) {
         clear()
-        let player = AVQueuePlayer()
-        player.isMuted = true
-        // A wallpaper must never keep the display awake or show up as an AirPlay source.
-        player.preventsDisplaySleepDuringVideoPlayback = false
-        player.allowsExternalPlayback = false
-        let looper = AVPlayerLooper(player: player, templateItem: AVPlayerItem(url: url))
-        looperStatus = looper.observe(\.status) { looper, _ in
-            if looper.status == .failed {
-                let reason = looper.error?.localizedDescription ?? "unknown error"
-                Log.playback.error("Cannot play \(url.lastPathComponent, privacy: .public): \(reason, privacy: .public)")
-            }
-        }
-        self.looper = looper
-        self.player = player
-        playerLayer.player = player
+        videoURL = url
         playerLayer.isHidden = false
+        loadPlayer()
     }
 
     func showImage(at url: URL) {
@@ -96,13 +94,11 @@ final class WallpaperView: NSView {
     }
 
     func clear() {
-        looperStatus = nil
-        looper?.disableLooping()
-        looper = nil
-        player?.pause()
-        player?.removeAllItems()
-        player = nil
-        playerLayer.player = nil
+        loadTask?.cancel()
+        loadTask = nil
+        videoURL = nil
+        videoHasAudio = false
+        removePlayer()
         playerLayer.isHidden = true
         imageLayer.contents = nil
         imageLayer.isHidden = true
@@ -111,19 +107,21 @@ final class WallpaperView: NSView {
     // MARK: - Playback settings
 
     func setPlaying(_ playing: Bool, rate: Float) {
-        guard let player else { return }
-        if playing {
-            if player.rate != rate {
-                player.rate = rate
-            }
-        } else if player.rate != 0 {
-            player.pause()
-        }
+        isPlaying = playing
+        self.rate = rate
+        applyPlayback()
     }
 
     func setAudio(muted: Bool, volume: Float) {
-        player?.isMuted = muted
-        player?.volume = volume
+        isMuted = muted
+        self.volume = volume
+        if videoHasAudio, playerHasAudio == muted {
+            // Silent and audible playback use different players, see loadPlayer().
+            loadPlayer()
+        } else {
+            player?.isMuted = muted
+            player?.volume = volume
+        }
     }
 
     func setScaling(_ mode: ScalingMode) {
@@ -141,5 +139,94 @@ final class WallpaperView: NSView {
             imageLayer.contentsGravity = .resize
         }
         CATransaction.commit()
+    }
+
+    // MARK: - Player
+
+    /// Builds a looping player for the current video. While muted the player gets a video-only
+    /// copy of the file: an audio track keeps the audio hardware running even when muted, which
+    /// costs energy and stops the Mac from going to sleep.
+    private func loadPlayer() {
+        guard let url = videoURL else { return }
+        let includesAudio = !isMuted
+        loadTask?.cancel()
+        loadTask = Task { [weak self] in
+            let (item, hasAudio) = await Self.makeItem(for: url, includingAudio: includesAudio)
+            guard let self, !Task.isCancelled, self.videoURL == url else { return }
+            self.loadTask = nil
+            self.videoHasAudio = hasAudio
+            self.installPlayer(with: item, hasAudio: includesAudio && hasAudio)
+            if hasAudio, self.playerHasAudio == self.isMuted {
+                // The sound setting changed while the player was being built.
+                self.loadPlayer()
+            }
+        }
+    }
+
+    private static func makeItem(for url: URL, includingAudio: Bool) async -> (item: AVPlayerItem, hasAudio: Bool) {
+        let asset = AVURLAsset(url: url)
+        let audioTracks = (try? await asset.loadTracks(withMediaType: .audio)) ?? []
+        guard !audioTracks.isEmpty else { return (AVPlayerItem(asset: asset), false) }
+        guard
+            !includingAudio,
+            let video = try? await asset.loadTracks(withMediaType: .video).first,
+            let (timeRange, transform) = try? await video.load(.timeRange, .preferredTransform)
+        else {
+            return (AVPlayerItem(asset: asset), true)
+        }
+        let composition = AVMutableComposition()
+        guard
+            let track = composition.addMutableTrack(withMediaType: .video, preferredTrackID: kCMPersistentTrackID_Invalid),
+            (try? track.insertTimeRange(timeRange, of: video, at: .zero)) != nil
+        else {
+            return (AVPlayerItem(asset: asset), true)
+        }
+        track.preferredTransform = transform
+        return (AVPlayerItem(asset: composition), true)
+    }
+
+    private func installPlayer(with item: AVPlayerItem, hasAudio: Bool) {
+        removePlayer()
+        let player = AVQueuePlayer()
+        player.isMuted = isMuted
+        player.volume = volume
+        // A wallpaper must never keep the display awake or show up as an AirPlay source.
+        player.preventsDisplaySleepDuringVideoPlayback = false
+        player.allowsExternalPlayback = false
+        let looper = AVPlayerLooper(player: player, templateItem: item)
+        let fileName = videoURL?.lastPathComponent ?? "video"
+        looperStatus = looper.observe(\.status) { looper, _ in
+            if looper.status == .failed {
+                let reason = looper.error?.localizedDescription ?? "unknown error"
+                Log.playback.error("Cannot play \(fileName, privacy: .public): \(reason, privacy: .public)")
+            }
+        }
+        self.looper = looper
+        self.player = player
+        playerHasAudio = hasAudio
+        playerLayer.player = player
+        applyPlayback()
+    }
+
+    private func removePlayer() {
+        looperStatus = nil
+        looper?.disableLooping()
+        looper = nil
+        player?.pause()
+        player?.removeAllItems()
+        player = nil
+        playerLayer.player = nil
+        playerHasAudio = false
+    }
+
+    private func applyPlayback() {
+        guard let player else { return }
+        if isPlaying {
+            if player.rate != rate {
+                player.rate = rate
+            }
+        } else if player.rate != 0 {
+            player.pause()
+        }
     }
 }
