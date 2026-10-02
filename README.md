@@ -1,140 +1,142 @@
 # AiWallpaper
 
-Живые обои для macOS: видео, GIF и картинки на рабочем столе — под иконками и окнами, на всех рабочих столах (Spaces) и дисплеях. А ещё — анимированные курсоры из наборов для Windows.
+**English** · [Русский](README.ru.md)
+
+Live wallpapers for macOS: videos, GIFs and pictures on your desktop — beneath icons and windows, on every Space and every display. Plus animated cursors from Windows cursor packs.
 
 <p align="center">
-  <img src="docs/screenshots/library.png" width="780" alt="Окно библиотеки AiWallpaper">
+  <img src="docs/screenshots/en/library.png" width="780" alt="The AiWallpaper library window">
 </p>
 
-## Возможности
+## Features
 
-- **Форматы:** MP4, MOV, M4V (H.264/HEVC), GIF, APNG, анимированный WebP, HEICS, а также статичные PNG, JPEG, HEIC, WebP.
-- **GIF и другие анимированные картинки** при импорте один раз перекодируются в H.264. Дальше они играют аппаратным декодером, как обычное видео, — это намного экономнее покадрового воспроизведения GIF. Маленькие GIF увеличиваются в целое число раз без сглаживания, поэтому пиксель-арт остаётся чётким.
-- **Несколько дисплеев:** одни обои на все экраны или свои на каждый, можно выключить на отдельном дисплее.
-- **Экономия энергии:** воспроизведение останавливается, когда рабочий стол полностью закрыт окнами или полноэкранным приложением, во время сна дисплеев и блокировки экрана. По желанию — от аккумулятора и в режиме энергосбережения. Видео не мешает дисплею засыпать.
-- **Курсоры:** наборы курсоров для Windows (`.ani`, `.cur`) заменяют указатель во всей системе, вместе с анимацией. Какой файл какому состоянию соответствует, берётся из `install.inf` набора. Подробнее — в разделе [«Курсоры»](#курсоры).
-- **Управление:** иконка в строке меню (пауза, следующие обои, быстрый выбор), окно библиотеки с drag-and-drop, «Открыть в программе → AiWallpaper» из Finder.
-- **Настройки:** масштаб (заполнить / вписать / растянуть), скорость, звук и громкость, запуск при входе в систему, первый кадр как обычные обои macOS (виден на экране блокировки и в Mission Control).
-- **Язык интерфейса** — русский или английский, выбирается по языку системы. Для остальных языков включается английский. Только для AiWallpaper язык можно сменить в «Системные настройки» → «Основные» → «Язык и регион» → «Приложения».
+- **Formats:** MP4, MOV, M4V (H.264/HEVC), GIF, APNG, animated WebP and HEICS, plus still PNG, JPEG, HEIC and WebP.
+- **GIFs and other animated images** are converted to H.264 once, on import. From then on they play through the hardware decoder like any other video, which is far more efficient than playing a GIF frame by frame. Small GIFs are scaled up by a whole number without smoothing, so pixel art stays crisp.
+- **Multiple displays:** one wallpaper on every screen or a different one on each; you can also turn it off on a single display.
+- **Energy saving:** playback pauses when the desktop is completely covered by windows or a full-screen app, while displays sleep and while the screen is locked. Optionally also on battery power and in Low Power Mode. Video never keeps the display awake.
+- **Cursors:** Windows cursor packs (`.ani`, `.cur`) replace the pointer across the whole system, animation included. Which file becomes which pointer is read from the pack's `install.inf`. See [Cursors](#cursors).
+- **Controls:** a menu bar icon (pause, next wallpaper, quick pick), a library window with drag and drop, and Open With → AiWallpaper in Finder.
+- **Settings:** scaling (fill / fit / stretch), speed, sound and volume, open at login, and the first frame as the regular macOS wallpaper (shown on the lock screen and in Mission Control).
+- **Interface language:** English or Russian, following the system language; any other language gets English. To change it for AiWallpaper alone, go to System Settings → General → Language & Region → Applications.
 
-## Установка
+## Installation
 
-Готовая сборка лежит в репозитории: [**скачать AiWallpaper.zip**](https://github.com/M1nata1/AiWallpaper/raw/main/dist/AiWallpaper.zip). Она подходит для Mac с Apple Silicon и Intel, нужна macOS 13 Ventura или новее.
+A ready-made build is in the repository: [**download AiWallpaper.zip**](https://github.com/M1nata1/AiWallpaper/raw/main/dist/AiWallpaper.zip). It runs on Macs with Apple silicon or Intel processors and needs macOS 13 Ventura or later.
 
-1. Распакуйте архив и перетащите AiWallpaper в папку «Программы».
-2. Откройте приложение. Оно не нотаризовано Apple, поэтому при первом запуске macOS его остановит и сообщит, что не может его проверить. Закройте это окно.
-3. Откройте «Системные настройки» → «Конфиденциальность и безопасность», внизу нажмите «Все равно открыть» и подтвердите паролем. Это нужно сделать только один раз.
+1. Unzip the archive and drag AiWallpaper to your Applications folder.
+2. Open the app. It is not notarized by Apple, so on first launch macOS stops it and says it cannot verify it. Close that message.
+3. Open System Settings → Privacy & Security, click Open Anyway near the bottom and confirm with your password. You only have to do this once.
 
-Вместо шагов 2–3 можно снять карантин в Терминале — тогда приложение сразу откроется без предупреждения:
+Instead of steps 2–3, you can remove the quarantine flag in Terminal; the app then opens without any warning:
 
 ```bash
 xattr -dr com.apple.quarantine /Applications/AiWallpaper.app
 ```
 
-## Сборка из исходников
+## Building from source
 
-Нужен Xcode 15 или новее и macOS 13 Ventura или новее. С одними Command Line Tools (Swift 5.9+) универсальная сборка недоступна — используйте `--native`.
+You need Xcode 15 or later and macOS 13 Ventura or later. With only the Command Line Tools (Swift 5.9+), universal builds are not available — use `--native`.
 
-Готовое приложение универсальное: macOS сама запускает версию для своего процессора — Apple Silicon или Intel.
+The app is universal: macOS runs the version for its own processor, Apple silicon or Intel.
 
 ```bash
-scripts/build.sh              # собрать build/AiWallpaper.app для Apple Silicon и Intel
-scripts/build.sh --install    # собрать и скопировать в /Applications
-scripts/build.sh --dist       # собрать и упаковать в dist/AiWallpaper.zip — архив для скачивания
-scripts/build.sh --native     # только для процессора этого Mac: вдвое быстрее, для разработки
-swift test                    # тесты импорта, конвертации и чтения курсоров
-scripts/screenshots.sh        # переснять скриншоты для README в docs/screenshots
+scripts/build.sh              # build build/AiWallpaper.app for Apple silicon and Intel
+scripts/build.sh --install    # build and copy to /Applications
+scripts/build.sh --dist       # build and pack into dist/AiWallpaper.zip, the download above
+scripts/build.sh --native     # this Mac's processor only: twice as fast, for development
+swift test                    # import, conversion and cursor-reading tests
+scripts/screenshots.sh        # retake the README screenshots in both languages in docs/screenshots
 ```
 
-Приложение подписывается ad hoc, поэтому собранное на этом Mac запускается сразу, без предупреждения.
+The app is signed ad hoc, so a copy built on your own Mac opens right away, without a warning.
 
-## Как пользоваться
+## Usage
 
-1. Запустите AiWallpaper — при первом запуске откроется пустая библиотека.
-2. Перетащите в окно файлы или папки либо нажмите «Добавить…».
-3. Двойной щелчок по обоям (или «Установить как обои») — и они на рабочем столе.
+1. Launch AiWallpaper — the first time, it opens an empty library.
+2. Drag files or folders into the window, or click Add….
+3. Double-click a wallpaper (or click Set as Wallpaper), and it is on your desktop.
 
-Дальше всё доступно из иконки в строке меню. При закрытом окне приложение не занимает место в Dock.
+Everything else is in the menu bar icon. While its windows are closed, the app takes no space in the Dock.
 
-## Курсоры
+## Cursors
 
 <p align="center">
-  <img src="docs/screenshots/settings.png" width="500" alt="Настройки AiWallpaper: раздел «Курсор» с анимированным превью набора">
+  <img src="docs/screenshots/en/settings.png" width="500" alt="AiWallpaper settings: the Cursor section with an animated preview of the pack">
 </p>
 
-AiWallpaper ставит наборы курсоров, сделанные для Windows, — как Mousecape, только без ручной конвертации: `.ani` и `.cur` приложение переводит в формат macOS само.
+AiWallpaper applies cursor packs made for Windows — like Mousecape, but with no manual conversion: the app turns `.ani` and `.cur` files into the macOS format by itself.
 
-1. Распакуйте набор в папку — обычно в ней лежат файлы `.ani` / `.cur` и `install.inf`.
-2. Откройте «Настройки» → «Курсор» → «Выбрать папку…». Курсоры появятся в превью сразу с анимацией.
-3. Нажмите «Применить» и подвигайте мышью.
+1. Unpack the cursor pack into a folder — it usually contains `.ani` / `.cur` files and an `install.inf`.
+2. Open Settings → Cursor → Choose Folder…. The cursors show up in the preview, already animated.
+3. Click Apply and move the mouse.
 
-Если в наборе есть `install.inf`, соответствие берётся из него. Поддерживаются оба распространённых вида: построчные записи в `[Wreg]` и общий список схемы (`Control Panel\Cursors\Schemes`). Без `install.inf` курсоры подбираются по именам файлов (`Normal`, `Text`, `Busy`, `Link`, `Help` и т. п.). Один курсор Windows может заменить сразу несколько курсоров macOS:
+If the pack has an `install.inf`, the mapping comes from it. Both common layouts are supported: one line per cursor in `[Wreg]`, and a single scheme list (`Control Panel\Cursors\Schemes`). Without an `install.inf`, cursors are matched by file name (`Normal`, `Text`, `Busy`, `Link`, `Help` and so on). One Windows cursor can replace several macOS cursors at once:
 
-| Курсор в наборе | Где появится в macOS |
+| Cursor in the pack | Where it appears in macOS |
 |---|---|
-| `Arrow` | обычная стрелка |
-| `IBeam` | текстовый курсор |
-| `Hand` | рука над ссылками, стрелка создания псевдонима при перетаскивании |
-| `Wait` | ожидание |
-| `AppStarting` | стрелка с индикатором фоновой работы |
-| `Crosshair` | прицел, в том числе при снимке экрана (⌘⇧4) |
-| `No` | «нельзя» при перетаскивании |
-| `SizeNS`, `SizeWE`, `SizeNWSE`, `SizeNESW` | изменение размера: края и углы окон, разделители, граница Dock |
-| `SizeAll` | перемещение, раскрытая и сжатая рука |
-| `Help` | стрелка со знаком вопроса |
+| `Arrow` | the regular arrow |
+| `IBeam` | the text cursor |
+| `Hand` | the hand over links; the make-alias arrow while dragging |
+| `Wait` | busy |
+| `AppStarting` | the arrow with a background-activity indicator |
+| `Crosshair` | crosshairs, including the screenshot one (⌘⇧4) |
+| `No` | "not allowed" while dragging |
+| `SizeNS`, `SizeWE`, `SizeNWSE`, `SizeNESW` | resizing: window edges and corners, split-view dividers, the Dock divider |
+| `SizeAll` | move, open hand and closed hand |
+| `Help` | the arrow with a question mark |
 
-Для `NWPen` (рукописный ввод), `UpArrow` (альтернативный выбор), `Person` и `Pin` аналогов в macOS нет: такие файлы перечислены под превью и не применяются.
+`NWPen` (handwriting), `UpArrow` (alternate select), `Person` and `Pin` have no macOS equivalent: such files are listed under the preview and are not applied.
 
-Что стоит знать:
+Good to know:
 
-- Размер указателя задаётся штатно: «Системные настройки» → «Универсальный доступ» → «Дисплей» → «Размер указателя».
-- macOS показывает не больше 24 кадров анимации курсора. Более длинные анимации равномерно прореживаются, длительность цикла сохраняется.
-- Курсоры заменяются через недокументированный API CoreGraphics — тот же, которым пользуется Mousecape. Системные файлы не меняются, отключать SIP не нужно. Перед заменой оригиналы сохраняются, поэтому «Сбросить» возвращает именно их.
-- Выбранный набор запоминается: после перезагрузки или нового входа в систему AiWallpaper применяет его снова при запуске. Если с курсором что-то не так, просто перезапустите приложение или нажмите «Сбросить».
-- Курсор-камера при снимке окна (⌘⇧4, затем пробел) остаётся системным: в наборах для Windows такого нет.
+- The pointer size is the system one: System Settings → Accessibility → Display → Pointer size.
+- macOS shows at most 24 frames of a cursor animation. Longer animations are thinned out evenly, keeping the length of the loop.
+- Cursors are replaced through an undocumented CoreGraphics API — the same one Mousecape uses. No system files are modified and SIP stays on. The original cursors are saved before they are replaced, so Reset brings back exactly them.
+- The chosen pack is remembered: after a restart or a new login, AiWallpaper applies it again when it launches. If the pointer ever looks wrong, just restart the app or click Reset.
+- The camera pointer for window screenshots (⌘⇧4, then Space) stays the system one: Windows packs have no such cursor.
 
-То же из терминала:
+The same from Terminal:
 
 ```bash
-swift run cursorctl check "<папка>"   # показать, какой файл на какой курсор встанет, ничего не меняя
-swift run cursorctl apply "<папка>"   # применить набор
-swift run cursorctl status            # что применено сейчас
-swift run cursorctl reset             # вернуть системные курсоры
+swift run cursorctl check "<folder>"   # show which file goes to which cursor, without changing anything
+swift run cursorctl apply "<folder>"   # apply a pack
+swift run cursorctl status             # show what is applied
+swift run cursorctl reset              # bring back the system cursors
 ```
 
-## Как это устроено
+## How it works
 
-Для каждого дисплея создаётся окно без рамки на уровне рабочего стола (`kCGDesktopWindowLevel`): выше системных обоев, но ниже иконок Finder и обычных окон. Окно пропускает клики, присутствует на всех Spaces и не скрывается по ⌘H. Видео играет через `AVQueuePlayer` + `AVPlayerLooper` — бесшовный цикл без перезагрузки файла.
+Each display gets a borderless window at desktop level (`kCGDesktopWindowLevel`): above the system wallpaper but below Finder icons and ordinary windows. The window lets clicks through, is present on every Space and is not hidden by ⌘H. Video plays through `AVQueuePlayer` + `AVPlayerLooper` — a seamless loop without reloading the file.
 
-Курсоры регистрируются в WindowServer недокументированными функциями CoreGraphics (`CGSRegisterCursorWithImages` и соседними). Кадры `.ani` извлекаются из вложенных `.cur` в самом крупном разрешении и передаются одной вертикальной лентой — в таком виде WindowServer принимает анимированный курсор.
+Cursors are registered with the WindowServer through undocumented CoreGraphics functions (`CGSRegisterCursorWithImages` and its neighbours). The frames of an `.ani` are taken from its embedded `.cur` images at the largest size and passed as a single vertical strip — the form in which the WindowServer accepts an animated cursor.
 
 ```
 Sources/
-  WallpaperCore/          импорт, конвертация GIF → H.264, превью, библиотека (без UI, покрыто тестами)
-  CursorCore/             чтение .ani/.cur и install.inf, применение и сброс курсоров (покрыто тестами)
-  CGSCursor/              объявления недокументированного API курсоров для Swift (C)
-  cursorctl/              утилита командной строки для курсоров
+  WallpaperCore/          import, GIF → H.264 conversion, thumbnails, library (no UI, covered by tests)
+  CursorCore/             reading .ani/.cur and install.inf, applying and resetting cursors (covered by tests)
+  CGSCursor/              Swift declarations of the undocumented cursor API (C)
+  cursorctl/              command-line tool for cursors
   AiWallpaper/
-    Engine/               окна рабочего стола, плееры, логика паузы
-    UI/                   строка меню, окно библиотеки, настройки (SwiftUI)
-    AppDelegate.swift     запуск, главное меню, открытие файлов
-    ScreenshotMode.swift  съёмка скриншотов для README (--screenshots)
-Tests/                    тесты WallpaperCore и CursorCore
-Resources/                Info.plist, иконка, переводы
-scripts/                  сборка .app, генерация иконки, скриншоты
-docs/screenshots/         скриншоты для README
-dist/                     готовая сборка для скачивания (scripts/build.sh --dist)
+    Engine/               desktop windows, players, pause logic
+    UI/                   menu bar, library window, settings (SwiftUI)
+    AppDelegate.swift     launch, main menu, opening files
+    ScreenshotMode.swift  taking the README screenshots (--screenshots)
+Tests/                    WallpaperCore and CursorCore tests
+Resources/                Info.plist, icon, translations
+scripts/                  building the .app, drawing the icon, screenshots
+docs/screenshots/         README screenshots: en/ and ru/
+dist/                     the ready-made build to download (scripts/build.sh --dist)
 ```
 
-Библиотека хранится в `~/Library/Application Support/AiWallpaper`: импортированные файлы — копии, оригиналы можно перемещать и удалять. Там же, в `CursorBackup`, лежат сохранённые системные курсоры.
+The library is kept in `~/Library/Application Support/AiWallpaper`: imported files are copies, so you can move or delete the originals. The saved system cursors are kept there too, in `CursorBackup`.
 
-Журнал воспроизведения:
+Playback log:
 
 ```bash
 log stream --predicate 'subsystem == "com.fadevec.AiWallpaper"'
 ```
 
-## Ограничения
+## Limitations
 
-- WebM, MKV и AVI macOS не воспроизводит штатно — сконвертируйте в MP4 (H.264 или HEVC), например через HandBrake.
-- На экране блокировки живые обои не играют: macOS не даёт сторонним приложениям показывать там своё содержимое. Вместо них виден первый кадр, если включено «Использовать первый кадр как обои macOS».
+- macOS cannot play WebM, MKV or AVI out of the box — convert them to MP4 (H.264 or HEVC), for example with HandBrake.
+- Live wallpapers do not play on the lock screen: macOS does not let third-party apps show anything there. The first frame is shown instead if "Use the first frame as the macOS wallpaper" is on.
