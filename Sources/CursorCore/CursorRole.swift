@@ -54,11 +54,22 @@ public struct CursorRole: Hashable, Sendable {
                    windowsRegistryNames: ["Help"], windowsAliases: ["help"]),
     ] + variants
 
-    /// More macOS cursors themed from the same Windows cursors: one-way resize arrows, the
-    /// window-edge and corner resize cursors macOS 15 uses (and the Dock divider), AppKit's own
-    /// crosshair and the screenshot crosshair (⌘⇧4). Listed after the primary roles so
-    /// `matching` still returns those first.
+    /// More macOS cursors themed from the same Windows cursors: the arrow and I-beam macOS 26
+    /// actually shows, the vertical-text I-beam, one-way resize arrows, the window-edge and corner
+    /// resize cursors macOS 15 uses (and the Dock divider), AppKit's own crosshair and the
+    /// screenshot crosshair (⌘⇧4). Listed after the primary roles so `matching` still returns
+    /// those first.
     private static let variants: [CursorRole] = {
+        let pointer = (["Arrow"], ["normal", "pointer", "arrow", "default"])
+        let text = (["IBeam"], ["text", "ibeam", "beam"])
+        // macOS 26 draws the arrow and I-beam from these and ignores the older Arrow and IBeam
+        // names; earlier systems do not have them, so registering them there changes nothing.
+        let macOS26 = [
+            CursorRole(id: "com.apple.coregraphics.ArrowS", displayName: "Pointer (macOS 26)",
+                       windowsRegistryNames: pointer.0, windowsAliases: pointer.1),
+            CursorRole(id: "com.apple.coregraphics.IBeamS", displayName: "Text (macOS 26)",
+                       windowsRegistryNames: text.0, windowsAliases: text.1),
+        ]
         let vertical = (["SizeNS"], ["vertical", "sizens", "ns", "resizenorthsouth"])
         let horizontal = (["SizeWE"], ["horizontal", "sizewe", "we", "resizeeastwest"])
         let diagonal1 = (["SizeNWSE"], ["diagonal1", "sizenwse", "nwse"])
@@ -66,6 +77,7 @@ public struct CursorRole: Hashable, Sendable {
         let crosshair = (["Crosshair", "precisionhair"], ["precision", "crosshair", "cross"])
         let move = (["SizeAll"], ["move", "sizeall", "drag"])
         let table: [(Int, String, ([String], [String]))] = [
+            (26, "Text (vertical)", text),
             (21, "Resize ↑", vertical), (22, "Resize ↓", vertical),
             (31, "Window edge ↑", vertical), (32, "Window edge ↕", vertical), (36, "Window edge ↓", vertical),
             (17, "Resize ←", horizontal), (18, "Resize →", horizontal),
@@ -76,7 +88,7 @@ public struct CursorRole: Hashable, Sendable {
             (8, "Screenshot crosshair", crosshair),
             (39, "Move (all directions)", move),
         ]
-        return table.map { id, name, names in
+        return macOS26 + table.map { id, name, names in
             CursorRole(id: "com.apple.cursor.\(id)", displayName: name,
                        windowsRegistryNames: names.0, windowsAliases: names.1)
         }

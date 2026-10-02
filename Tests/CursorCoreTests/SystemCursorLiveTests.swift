@@ -70,11 +70,12 @@ final class SystemCursorKeepTests: XCTestCase {
         XCTAssertEqual(app.apply(theme, pointSize: 28).applied, ["Test"])
         XCTAssertTrue(app.replacedAssignments(in: theme, pointSize: 28).isEmpty)
 
-        // Something else registers its own cursor under that name, as macOS 26 does with the pointer.
+        // Something else registers its own cursor under that name, as macOS may do behind our back.
         SystemCursorController(rootURL: temporaryFolder()).apply(theme, pointSize: 20)
         XCTAssertEqual(app.replacedAssignments(in: theme, pointSize: 28).map(\.role.id), [role.id])
 
-        XCTAssertEqual(app.restoreReplaced(theme, pointSize: 28).applied, ["Test"])
+        XCTAssertTrue(app.restoreReplaced(theme, pointSize: 28, ignoring: [role.id]).restored.isEmpty, "ignored roles stay as they are")
+        XCTAssertEqual(app.restoreReplaced(theme, pointSize: 28).restored, ["Test"])
         XCTAssertTrue(app.replacedAssignments(in: theme, pointSize: 28).isEmpty)
         XCTAssertEqual(try XCTUnwrap(app.registeredSize(roleID: role.id)).width, 28, accuracy: 0.5)
 

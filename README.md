@@ -93,7 +93,8 @@ Good to know:
 - macOS shows at most 24 frames of a cursor animation. Longer animations are thinned out evenly, keeping the length of the loop.
 - Cursors are replaced through an undocumented CoreGraphics API — the same one Mousecape uses. No system files are modified and SIP stays on. The original cursors are saved before they are replaced, so Reset brings back exactly them.
 - The chosen pack is remembered: after a restart or a new login, AiWallpaper applies it again when it launches. If the pointer ever looks wrong, just restart the app or click Reset.
-- Sometimes macOS puts its own cursors back by itself — macOS 26, for example, does this with the arrow and the text cursor after sleep or a display change. AiWallpaper notices within a few seconds and puts the pack's cursors back.
+- If macOS puts its own cursors back by itself, for example after sleep or a display change, AiWallpaper notices within a few seconds and puts the pack's cursors back.
+- macOS 26 draws the arrow and the text cursor from new system cursors (`ArrowS`, `IBeamS`). AiWallpaper themes them as well as the older ones.
 - The camera pointer for window screenshots (⌘⇧4, then Space) stays the system one: Windows packs have no such cursor.
 
 The same from Terminal:

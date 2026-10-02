@@ -34,6 +34,8 @@ final class CursorSettings: ObservableObject {
     private var appliedTheme: CursorTheme?
     private var keepTimer: Timer?
     private var observesSystemEvents = false
+    /// Cursors this macOS will not keep even right after they are registered; not retried.
+    private var notKeptRoleIDs: Set<String> = []
 
     private enum Key {
         static let folderPath = "cursorFolderPath"
@@ -152,12 +154,13 @@ final class CursorSettings: ObservableObject {
         keep(applied)
     }
 
-    /// Keeps the pack in place. macOS 26 puts its own pointer and I-beam back whenever it
-    /// re-applies the Accessibility pointer settings — at login, after sleep, on display changes —
-    /// so the app looks right after such events, and every few seconds for anything that posts no
-    /// notification. A look costs about a millisecond and changes only cursors that were replaced.
+    /// Keeps the pack in place. macOS can register its own cursors again behind our back — Mousecape
+    /// re-applies on display and session changes for the same reason — so the app looks right after
+    /// such events, and every few seconds for anything that posts no notification. A look costs
+    /// about a millisecond and changes only cursors that were replaced.
     private func keep(_ theme: CursorTheme) {
         appliedTheme = theme
+        notKeptRoleIDs = []
         if keepTimer == nil {
             let timer = Timer(timeInterval: 5, repeats: true) { [weak self] _ in
                 Task { @MainActor in self?.restoreReplacedCursors() }
@@ -189,12 +192,16 @@ final class CursorSettings: ObservableObject {
 
     private func restoreReplacedCursors() {
         guard let appliedTheme else { return }
-        let result = controller.restoreReplaced(appliedTheme, pointSize: pointSize)
-        if !result.applied.isEmpty {
-            Log.cursor.info("macOS replaced cursors; put back: \(result.applied.joined(separator: ", "), privacy: .public)")
+        let result = controller.restoreReplaced(appliedTheme, pointSize: pointSize, ignoring: notKeptRoleIDs)
+        notKeptRoleIDs.formUnion(result.notKept)
+        if !result.restored.isEmpty {
+            Log.cursor.info("macOS replaced cursors; put back: \(result.restored.joined(separator: ", "), privacy: .public)")
         }
         if !result.failed.isEmpty {
             Log.cursor.error("Could not put back: \(result.failed.joined(separator: ", "), privacy: .public)")
+        }
+        if !result.notKept.isEmpty {
+            Log.cursor.info("Not kept by this macOS, no longer retried: \(result.notKept.sorted().joined(separator: ", "), privacy: .public)")
         }
     }
 

@@ -127,7 +127,11 @@ final class WindowsCursorInfTests: XCTestCase {
     }
 
     func testRegistryNamesMapToMacRoles() {
-        XCTAssertEqual(CursorRole.roles(forRegistryName: "Arrow").map(\.id), ["com.apple.coregraphics.Arrow"])
+        // macOS 26 shows the arrow and I-beam from the "S" names; the older names stay for earlier systems.
+        XCTAssertEqual(CursorRole.roles(forRegistryName: "Arrow").map(\.id),
+                       ["com.apple.coregraphics.Arrow", "com.apple.coregraphics.ArrowS"])
+        XCTAssertEqual(CursorRole.roles(forRegistryName: "IBeam").map(\.id),
+                       ["com.apple.coregraphics.IBeam", "com.apple.coregraphics.IBeamS", "com.apple.cursor.26"])
         XCTAssertEqual(CursorRole.roles(forRegistryName: "Wait").map(\.id), ["com.apple.coregraphics.Wait"])
         // "Hand" (the clickable pointer in Windows) themes both link and pointing hand on macOS.
         XCTAssertEqual(CursorRole.roles(forRegistryName: "Hand").map(\.id), ["com.apple.cursor.2", "com.apple.cursor.13"])

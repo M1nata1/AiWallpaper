@@ -79,22 +79,31 @@ public final class SystemCursorController {
 
     // MARK: - Keeping the theme
 
-    /// The theme's cursors that no longer hold its images. macOS 26 puts its own pointer and
-    /// I-beam back when it re-applies the Accessibility pointer settings, so an app that keeps a
-    /// theme applied has to look from time to time. Changes nothing.
+    /// The theme's cursors that no longer hold its images, e.g. because macOS registered its own
+    /// again. An app that keeps a theme applied looks from time to time. Changes nothing.
     public func replacedAssignments(in theme: CursorTheme, pointSize: CGFloat) -> [CursorAssignment] {
         theme.assignments.filter { !holds($0, pointSize: pointSize) }
     }
 
-    /// Registers again every cursor of the theme that macOS has replaced.
+    public struct RestoreResult {
+        public var restored: [String] = []        // role display names put back
+        public var failed: [String] = []          // role display names that errored
+        /// Role IDs that still read back as the system's cursor right after registering ours (as
+        /// macOS 26 appears to do with the older Arrow and IBeam names). Retrying them is pointless.
+        public var notKept: Set<String> = []
+    }
+
+    /// Registers again every cursor of the theme that macOS has replaced, except `ignoring`.
     @discardableResult
-    public func restoreReplaced(_ theme: CursorTheme, pointSize: CGFloat) -> ApplyResult {
-        var result = ApplyResult(applied: [], failed: [])
-        for assignment in replacedAssignments(in: theme, pointSize: pointSize) {
-            if register(assignment, pointSize: pointSize) {
-                result.applied.append(assignment.role.displayName)
-            } else {
+    public func restoreReplaced(_ theme: CursorTheme, pointSize: CGFloat, ignoring: Set<String> = []) -> RestoreResult {
+        var result = RestoreResult()
+        for assignment in replacedAssignments(in: theme, pointSize: pointSize) where !ignoring.contains(assignment.role.id) {
+            if !register(assignment, pointSize: pointSize) {
                 result.failed.append(assignment.role.displayName)
+            } else if holds(assignment, pointSize: pointSize) {
+                result.restored.append(assignment.role.displayName)
+            } else {
+                result.notKept.insert(assignment.role.id)
             }
         }
         return result
