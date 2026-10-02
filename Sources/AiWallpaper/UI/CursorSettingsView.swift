@@ -111,7 +111,7 @@ struct CursorSettingsSection: View {
                 }
 
                 if !cursor.unmatchedNames.isEmpty {
-                    Text(String(format: NSLocalizedString("No macOS match for: %@", comment: "Cursor settings"),
+                    Text(String(format: NSLocalizedString("No macOS equivalent for: %@", comment: "Cursor settings"),
                                 cursor.unmatchedNames.joined(separator: ", ")))
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -122,7 +122,7 @@ struct CursorSettingsSection: View {
                         .buttonStyle(.borderedProminent)
                         .disabled(cursor.mappedCount == 0)
                     if cursor.isApplied {
-                        Button("Reset to Default", action: cursor.reset)
+                        Button("Reset", action: cursor.reset)
                     }
                     Spacer()
                 }
@@ -136,7 +136,7 @@ struct CursorSettingsSection: View {
         } footer: {
             VStack(alignment: .leading, spacing: 6) {
                 Text("Pointer size is set in System Settings → Accessibility → Display.")
-                Text("Replaces the pointer for the whole system using a private macOS interface. If the pointer ever looks wrong, click Reset — or log out and back in, which always restores it.")
+                Text("If something goes wrong, just restart the app or click Reset.")
             }
             .font(.caption)
             .foregroundStyle(.secondary)

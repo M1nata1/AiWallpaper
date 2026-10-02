@@ -3,8 +3,6 @@ import Combine
 import CursorCore
 import Foundation
 
-/// Drives the cursor section of the Settings window: the chosen pack, the preview, and the
-/// Apply / Reset actions over `SystemCursorController`.
 /// One cursor ready to show animated in the settings preview.
 struct CursorPreview: Identifiable {
     let id: String
@@ -14,6 +12,8 @@ struct CursorPreview: Identifiable {
     let durations: [Double]
 }
 
+/// Drives the cursor section of the Settings window: the chosen pack, the preview, and the
+/// Apply / Reset actions over `SystemCursorController`.
 @MainActor
 final class CursorSettings: ObservableObject {
     @Published private(set) var theme: CursorTheme?
@@ -27,8 +27,13 @@ final class CursorSettings: ObservableObject {
     /// Accessibility → Display → Pointer size, so the app offers no size control of its own.
     private let pointSize: Double = 28
 
+    /// Folder of the pack shown in the preview.
+    private var themeFolder: URL?
+
     private enum Key {
         static let folderPath = "cursorFolderPath"
+        /// Folder of the applied pack, which can differ from the one being previewed.
+        static let appliedFolderPath = "appliedCursorFolderPath"
     }
 
     init() {
@@ -87,14 +92,17 @@ final class CursorSettings: ObservableObject {
             return
         }
         theme = loaded
+        themeFolder = url
         previews = Self.makePreviews(loaded)
         if remember {
             defaults.set(url.path, forKey: Key.folderPath)
             let source = loaded.usedInf
                 ? NSLocalizedString("mapped from install.inf", comment: "Cursor status")
                 : NSLocalizedString("mapped by file name", comment: "Cursor status")
-            status = String(format: NSLocalizedString("Loaded %d cursors from “%@” (%@).", comment: "Cursor status"),
-                            Self.cursorCount(loaded), loaded.name, source)
+            // localizedStringWithFormat picks the plural form from Localizable.stringsdict.
+            status = String.localizedStringWithFormat(
+                NSLocalizedString("Loaded %d cursors from “%@” (%@).", comment: "Cursor status"),
+                Self.cursorCount(loaded), loaded.name, source)
         }
     }
 
@@ -102,17 +110,42 @@ final class CursorSettings: ObservableObject {
         guard let theme else { return }
         let result = controller.apply(theme, pointSize: pointSize)
         isApplied = controller.isApplied
-        if result.failed.isEmpty {
-            status = String(format: NSLocalizedString("Applied %d cursors. Move the mouse to see them.", comment: "Cursor status"),
-                            Self.cursorCount(theme))
-        } else {
-            status = String(format: NSLocalizedString("Applied %d cursors; %d could not be set.", comment: "Cursor status"),
-                            result.applied.count, result.failed.count)
+        if isApplied, let themeFolder {
+            defaults.set(themeFolder.path, forKey: Key.appliedFolderPath)
         }
+        if result.failed.isEmpty {
+            status = String.localizedStringWithFormat(
+                NSLocalizedString("Applied %d cursors. Move the mouse to see them.", comment: "Cursor status"),
+                Self.cursorCount(theme))
+        } else {
+            status = String.localizedStringWithFormat(
+                NSLocalizedString("Applied %d cursors; %d could not be set.", comment: "Cursor status"),
+                result.applied.count, result.failed.count)
+        }
+    }
+
+    /// Puts the applied pack back when the app starts. The window server forgets registered
+    /// cursors when the user logs out, and macOS can restore some of its own in the meantime;
+    /// the choice itself is kept on disk. So restarting the app is enough to repair the pointer.
+    func reapplyIfNeeded() {
+        guard controller.isApplied else { return }
+        let folder: URL
+        if let path = defaults.string(forKey: Key.appliedFolderPath) {
+            folder = URL(fileURLWithPath: path)
+        } else if let themeFolder, theme?.name == controller.appliedThemeName {
+            folder = themeFolder // applied by a version that did not record the folder separately
+        } else {
+            return
+        }
+        let applied = folder == themeFolder ? theme : CursorTheme.load(fromFolder: folder)
+        guard let applied, !applied.assignments.isEmpty else { return }
+        controller.apply(applied, pointSize: pointSize)
+        defaults.set(folder.path, forKey: Key.appliedFolderPath)
     }
 
     func reset() {
         controller.reset()
+        defaults.removeObject(forKey: Key.appliedFolderPath)
         isApplied = controller.isApplied
         status = NSLocalizedString("System cursors restored.", comment: "Cursor status")
     }

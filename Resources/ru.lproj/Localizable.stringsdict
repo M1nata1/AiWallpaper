@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Loaded %d cursors from “%@” (%@).</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@cursors@ из набора «%2$@» (%3$@).</string>
+		<key>cursors</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Загружен %1$d курсор</string>
+			<key>few</key>
+			<string>Загружено %1$d курсора</string>
+			<key>many</key>
+			<string>Загружено %1$d курсоров</string>
+			<key>other</key>
+			<string>Загружено %1$d курсора</string>
+		</dict>
+	</dict>
+	<key>Applied %d cursors. Move the mouse to see them.</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@message@</string>
+		<key>message</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Применён %d курсор. Подвигайте мышью, чтобы его увидеть.</string>
+			<key>few</key>
+			<string>Применено %d курсора. Подвигайте мышью, чтобы их увидеть.</string>
+			<key>many</key>
+			<string>Применено %d курсоров. Подвигайте мышью, чтобы их увидеть.</string>
+			<key>other</key>
+			<string>Применено %d курсора. Подвигайте мышью, чтобы их увидеть.</string>
+		</dict>
+	</dict>
+	<key>Applied %d cursors; %d could not be set.</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@cursors@, %2$d не удалось установить.</string>
+		<key>cursors</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Применён %1$d курсор</string>
+			<key>few</key>
+			<string>Применено %1$d курсора</string>
+			<key>many</key>
+			<string>Применено %1$d курсоров</string>
+			<key>other</key>
+			<string>Применено %1$d курсора</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

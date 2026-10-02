@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Loaded %d cursors from “%@” (%@).</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Loaded %1$#@cursors@ from “%2$@” (%3$@).</string>
+		<key>cursors</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d cursor</string>
+			<key>other</key>
+			<string>%1$d cursors</string>
+		</dict>
+	</dict>
+	<key>Applied %d cursors. Move the mouse to see them.</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@message@</string>
+		<key>message</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Applied %d cursor. Move the mouse to see it.</string>
+			<key>other</key>
+			<string>Applied %d cursors. Move the mouse to see them.</string>
+		</dict>
+	</dict>
+	<key>Applied %d cursors; %d could not be set.</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Applied %1$#@cursors@; %2$d could not be set.</string>
+		<key>cursors</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d cursor</string>
+			<key>other</key>
+			<string>%1$d cursors</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

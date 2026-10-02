@@ -3,9 +3,9 @@
 "The “%@” format is not supported. Use GIF, MP4, MOV, PNG, JPEG, HEIC or WebP." = "Формат «%@» не поддерживается. Используйте GIF, MP4, MOV, PNG, JPEG, HEIC или WebP.";
 "The file could not be read." = "Не удалось прочитать файл.";
 "The file contains no video." = "В файле нет видео.";
-"macOS cannot play this video. Convert it to MP4 or MOV (H.264 or HEVC)." = "macOS не может воспроизвести это видео. Сконвертируйте его в MP4 или MOV (H.264 или HEVC).";
-"Conversion failed: %@" = "Ошибка конвертации: %@";
-"No videos or pictures were found." = "Видео и изображения не найдены.";
+"macOS cannot play this video. Convert it to MP4 or MOV (H.264 or HEVC)." = "macOS не может воспроизвести это видео. Преобразуйте его в MP4 или MOV (H.264 или HEVC).";
+"Conversion failed: %@" = "Не удалось преобразовать файл: %@";
+"No videos or pictures were found." = "Не найдено ни видео, ни изображений.";
 "“%@” could not be added" = "Не удалось добавить «%@»";
 "Some files could not be added" = "Некоторые файлы не удалось добавить";
 
@@ -45,8 +45,8 @@
 "Delete…" = "Удалить…";
 "Same as All Displays" = "Как на всех дисплеях";
 "Turn Off" = "Выключить";
-"Adding “%@”… (%d more in queue)" = "Добавление «%@»… (ещё в очереди: %d)";
-"Adding “%@”…" = "Добавление «%@»…";
+"Adding “%@”… (%d more in queue)" = "Добавляется «%@»… (в очереди ещё %d)";
+"Adding “%@”…" = "Добавляется «%@»…";
 "Current wallpaper" = "Текущие обои";
 "Drop GIFs and videos here" = "Перетащите сюда GIF и видео";
 "MP4, MOV, M4V, GIF, APNG, WebP, HEIC, PNG and JPEG are supported." = "Поддерживаются MP4, MOV, M4V, GIF, APNG, WebP, HEIC, PNG и JPEG.";
@@ -63,14 +63,14 @@
 "Play sound" = "Воспроизводить звук";
 "Volume" = "Громкость";
 "Energy" = "Энергосбережение";
-"Pause when windows cover the desktop" = "Пауза, когда окна закрывают рабочий стол";
-"Pause on battery power" = "Пауза при работе от аккумулятора";
-"Pause in Low Power Mode" = "Пауза в режиме энергосбережения";
-"Playback always stops while displays sleep or the screen is locked." = "Во время сна дисплеев и блокировки экрана воспроизведение всегда останавливается.";
+"Pause when windows cover the desktop" = "Ставить на паузу, когда окна закрывают рабочий стол";
+"Pause on battery power" = "Ставить на паузу при работе от аккумулятора";
+"Pause in Low Power Mode" = "Ставить на паузу в режиме энергосбережения";
+"Playback always stops while displays sleep or the screen is locked." = "Когда дисплеи в режиме сна или экран заблокирован, обои всегда на паузе.";
 "General" = "Основные";
 "Open at login" = "Открывать при входе в систему";
-"Use the first frame as the macOS wallpaper" = "Ставить первый кадр как обои macOS";
-"Shown on the lock screen, in Mission Control and when AiWallpaper is not running." = "Виден на экране блокировки, в Mission Control и когда AiWallpaper не запущен.";
+"Use the first frame as the macOS wallpaper" = "Использовать первый кадр как обои macOS";
+"Shown on the lock screen, in Mission Control and when AiWallpaper is not running." = "Его видно на экране блокировки, в Mission Control и когда AiWallpaper не запущен.";
 "Library folder" = "Папка библиотеки";
 
 /* Menus */
@@ -99,41 +99,38 @@
 "Minimize" = "Свернуть";
 "Zoom" = "Изменить масштаб";
 
-/* Cursor */
+/* Cursor. Messages with a number of cursors are in Localizable.stringsdict (plural forms). */
 "Apply" = "Применить";
 "Cursor" = "Курсор";
 "Cursor pack" = "Набор курсоров";
 "Choose Folder…" = "Выбрать папку…";
 "Change…" = "Изменить…";
-"No macOS match for: %@" = "Нет аналога в macOS: %@";
-"Reset to Default" = "Сбросить";
-"Pointer size is set in System Settings → Accessibility → Display." = "Размер указателя задаётся в Системных настройках → Универсальный доступ → Дисплей.";
-"Replaces the pointer for the whole system using a private macOS interface. If the pointer ever looks wrong, click Reset — or log out and back in, which always restores it." = "Заменяет указатель во всей системе через приватный интерфейс macOS. Если указатель когда-нибудь выглядит неправильно, нажмите «Сбросить» — или выйдите из системы и войдите снова, это всегда всё восстанавливает.";
+"No macOS equivalent for: %@" = "Нет аналогов в macOS: %@";
+"Reset" = "Сбросить";
+"Pointer size is set in System Settings → Accessibility → Display." = "Размер указателя можно изменить в Системных настройках: «Универсальный доступ» → «Дисплей».";
+"If something goes wrong, just restart the app or click Reset." = "Если что-то пойдёт не так, просто перезапустите приложение или нажмите «Сбросить».";
 "Choose" = "Выбрать";
 "Choose a folder of cursors (.ani, .cur, .png)." = "Выберите папку с курсорами (.ani, .cur, .png).";
-"No usable cursors were found in that folder." = "В этой папке не найдено подходящих курсоров.";
-"Loaded %d cursors from “%@” (%@)." = "Загружено курсоров: %d из «%@» (%@).";
-"mapped from install.inf" = "соответствие из install.inf";
-"mapped by file name" = "соответствие по именам файлов";
-"“%@” is applied." = "«%@» применён.";
-"Applied %d cursors. Move the mouse to see them." = "Применено курсоров: %d. Подвигайте мышь, чтобы увидеть.";
-"Applied %d cursors; %d could not be set." = "Применено курсоров: %d; не удалось установить: %d.";
-"System cursors restored." = "Системные курсоры восстановлены.";
+"No usable cursors were found in that folder." = "В этой папке нет подходящих курсоров.";
+"mapped from install.inf" = "по install.inf";
+"mapped by file name" = "по именам файлов";
+"“%@” is applied." = "Набор «%@» применён.";
+"System cursors restored." = "Стандартные курсоры восстановлены.";
 
 /* Cursor roles (preview labels) */
 "Pointer" = "Указатель";
 "Text (I-beam)" = "Текст";
 "Link" = "Ссылка";
-"Pointing hand" = "Рука";
+"Pointing hand" = "Указывающая рука";
 "Busy (spinner)" = "Занят";
 "Working in background" = "Фоновый режим";
 "Move" = "Перемещение";
 "Closed hand" = "Сжатая рука";
-"Open hand" = "Открытая рука";
+"Open hand" = "Раскрытая рука";
 "Crosshair" = "Прицел";
 "Not allowed" = "Недоступно";
-"Resize ↕" = "Размер ↕";
-"Resize ↔" = "Размер ↔";
-"Resize ⤡" = "Размер ⤡";
-"Resize ⤢" = "Размер ⤢";
+"Resize ↕" = "Изменение размера ↕";
+"Resize ↔" = "Изменение размера ↔";
+"Resize ⤡" = "Изменение размера ⤡";
+"Resize ⤢" = "Изменение размера ⤢";
 "Help" = "Справка";

@@ -69,6 +69,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
         NSApp.mainMenu = makeMainMenu()
         manager.start()
+        cursorSettings.reapplyIfNeeded()
         statusMenu = StatusMenuController(library: library, manager: manager, actions: .init(
             openLibrary: { [unowned self] in showLibrary(nil) },
             addFiles: { [unowned self] in addWallpapers(nil) },
