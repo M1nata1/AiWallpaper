@@ -9,7 +9,7 @@ import Foundation
 struct CursorPreview: Identifiable {
     let id: String
     let name: String
-    let frames: [NSImage]
+    let frames: [CGImage]
     /// Seconds per frame, matching `frames`; empty or single-frame means static.
     let durations: [Double]
 }
@@ -24,7 +24,7 @@ final class CursorSettings: ObservableObject {
     private let controller = SystemCursorController()
     private let defaults = UserDefaults.standard
     /// Base on-screen size. The pointer is enlarged from here by System Settings →
-    /// Accessibility → Pointer, so the app offers no size control of its own.
+    /// Accessibility → Display → Pointer size, so the app offers no size control of its own.
     private let pointSize: Double = 28
 
     private enum Key {
@@ -55,11 +55,10 @@ final class CursorSettings: ObservableObject {
         var seen: Set<URL> = []
         return theme.assignments.compactMap { assignment in
             guard seen.insert(assignment.sourceURL).inserted else { return nil }
-            let size = NSSize(width: assignment.decoded.pixelSize.width, height: assignment.decoded.pixelSize.height)
             return CursorPreview(
                 id: assignment.role.id,
-                name: assignment.role.displayName,
-                frames: assignment.decoded.frames.map { NSImage(cgImage: $0, size: size) },
+                name: NSLocalizedString(assignment.role.displayName, comment: "Cursor role"),
+                frames: assignment.decoded.frames,
                 durations: assignment.decoded.frameDurations
             )
         }

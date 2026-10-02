@@ -30,7 +30,8 @@ extension Wallpaper {
     var durationText: String? {
         guard let duration else { return nil }
         if duration < 60 {
-            return String(format: NSLocalizedString("%.1f s", comment: "Loop length in seconds"), duration)
+            // The user's locale picks the decimal separator ("22,4 с" in Russian), as for file sizes.
+            return String(format: NSLocalizedString("%.1f s", comment: "Loop length in seconds"), locale: .current, duration)
         }
         let seconds = Int(duration.rounded())
         return String(format: "%d:%02d", seconds / 60, seconds % 60)

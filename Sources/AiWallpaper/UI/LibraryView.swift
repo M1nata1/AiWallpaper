@@ -174,9 +174,10 @@ struct LibraryView: View {
                 Text(importStatus(for: job))
                     .lineLimit(1)
                     .truncationMode(.middle)
-            } else {
+            } else if manager.pauseReason != nil || !manager.hasWallpaper {
+                // Playing is the normal state and needs no label; only explain why nothing moves.
                 Circle()
-                    .fill(manager.pauseReason == nil && manager.hasWallpaper ? Color.green : Color.secondary)
+                    .fill(Color.secondary)
                     .frame(width: 8, height: 8)
                 Text(manager.statusText)
                     .foregroundStyle(.secondary)

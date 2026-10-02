@@ -85,5 +85,13 @@ final class WindowManager: NSObject, NSWindowDelegate {
         if !othersVisible {
             NSApp.setActivationPolicy(.accessory)
         }
+        // Let the closed window go: a hidden window keeps its SwiftUI content alive and updating
+        // (the animated cursor previews kept the app at ~20% CPU). It is rebuilt when reopened,
+        // at the position saved under its autosave name.
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            if closing === self.libraryWindow { self.libraryWindow = nil }
+            if closing === self.settingsWindow { self.settingsWindow = nil }
+        }
     }
 }

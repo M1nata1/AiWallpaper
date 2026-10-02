@@ -1,37 +1,76 @@
+import QuartzCore
 import SwiftUI
 
 /// Plays a cursor's frames in a loop, keeping pixel art crisp. Static cursors show their frame.
-struct AnimatedCursorImage: View {
-    let frames: [NSImage]
+///
+/// The animation is a Core Animation keyframe animation, run by the window server: SwiftUI does
+/// not redraw anything per frame, so the previews cost the app almost no CPU.
+struct AnimatedCursorImage: NSViewRepresentable {
+    let frames: [CGImage]
     let durations: [Double]
 
-    var body: some View {
-        if frames.count > 1, totalDuration > 0 {
-            TimelineView(.periodic(from: .now, by: 0.05)) { context in
-                image(frames[frameIndex(at: context.date)])
-            }
-        } else {
-            image(frames.first)
-        }
+    func makeNSView(context: Context) -> CursorAnimationView {
+        CursorAnimationView()
     }
 
-    private var totalDuration: Double { durations.prefix(frames.count).reduce(0, +) }
+    func updateNSView(_ view: CursorAnimationView, context: Context) {
+        view.play(frames: frames, durations: durations)
+    }
+}
 
-    private func image(_ nsImage: NSImage?) -> some View {
-        Image(nsImage: nsImage ?? NSImage())
-            .interpolation(.none) // pixel-art cursors stay sharp
-            .resizable()
-            .scaledToFit()
+final class CursorAnimationView: NSView {
+    private let imageLayer = CALayer()
+    private var shownFrames: [CGImage] = []
+
+    override init(frame: NSRect) {
+        super.init(frame: frame)
+        wantsLayer = true
+        imageLayer.contentsGravity = .resizeAspect
+        imageLayer.magnificationFilter = .nearest // pixel-art cursors stay sharp
+        imageLayer.minificationFilter = .nearest
+        layer?.addSublayer(imageLayer)
     }
 
-    /// The frame to show now, looping over the per-frame durations.
-    private func frameIndex(at date: Date) -> Int {
-        var t = date.timeIntervalSinceReferenceDate.truncatingRemainder(dividingBy: totalDuration)
-        for (index, duration) in durations.enumerated() where index < frames.count {
-            if t < duration { return index }
-            t -= duration
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) is not supported")
+    }
+
+    override func layout() {
+        super.layout()
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        imageLayer.frame = bounds
+        CATransaction.commit()
+    }
+
+    func play(frames: [CGImage], durations: [Double]) {
+        // SwiftUI calls this on every update of the settings; restart only for new frames.
+        guard frames.count != shownFrames.count || !zip(frames, shownFrames).allSatisfy({ $0 === $1 }) else { return }
+        shownFrames = frames
+        imageLayer.removeAnimation(forKey: "frames")
+        imageLayer.contents = frames.first
+
+        let timed = Array(durations.prefix(frames.count))
+        let total = timed.reduce(0, +)
+        guard frames.count > 1, timed.count == frames.count, total > 0 else { return }
+
+        let animation = CAKeyframeAnimation(keyPath: "contents")
+        animation.values = frames
+        // Discrete key times: one per frame where it starts, plus the closing 1.
+        var start = 0.0
+        var keyTimes: [NSNumber] = []
+        for duration in timed {
+            keyTimes.append(NSNumber(value: start / total))
+            start += duration
         }
-        return frames.count - 1
+        keyTimes.append(1)
+        animation.keyTimes = keyTimes
+        animation.calculationMode = .discrete
+        animation.duration = total
+        animation.repeatCount = .infinity
+        animation.isRemovedOnCompletion = false
+        imageLayer.add(animation, forKey: "frames")
     }
 }
 
@@ -62,8 +101,9 @@ struct CursorSettingsSection: View {
                                 Text(item.name)
                                     .font(.caption2)
                                     .foregroundStyle(.secondary)
-                                    .lineLimit(1)
-                                    .frame(width: 62)
+                                    .multilineTextAlignment(.center)
+                                    .lineLimit(2)
+                                    .frame(width: 72)
                             }
                         }
                     }
@@ -95,11 +135,13 @@ struct CursorSettingsSection: View {
             Text("Cursor")
         } footer: {
             VStack(alignment: .leading, spacing: 6) {
-                Text("Pointer size is set in System Settings → Accessibility → Pointer.")
+                Text("Pointer size is set in System Settings → Accessibility → Display.")
                 Text("Replaces the pointer for the whole system using a private macOS interface. If the pointer ever looks wrong, click Reset — or log out and back in, which always restores it.")
             }
             .font(.caption)
             .foregroundStyle(.secondary)
+            .multilineTextAlignment(.leading)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 }

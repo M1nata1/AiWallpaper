@@ -58,6 +58,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     // MARK: - NSApplicationDelegate
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        if let directory = ScreenshotMode.outputDirectory {
+            // Documentation helper; runs alongside the copy in use, so it skips the checks below.
+            ScreenshotMode.run(to: directory, library: library, preferences: preferences,
+                               manager: manager, importer: importer, cursorSettings: cursorSettings)
+            return
+        }
         if activateRunningCopy() {
             return
         }

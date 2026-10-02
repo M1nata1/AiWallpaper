@@ -107,7 +107,7 @@
 "Change…" = "Изменить…";
 "No macOS match for: %@" = "Нет аналога в macOS: %@";
 "Reset to Default" = "Сбросить";
-"Pointer size is set in System Settings → Accessibility → Pointer." = "Размер указателя задаётся в Системных настройках → Универсальный доступ → Указатель.";
+"Pointer size is set in System Settings → Accessibility → Display." = "Размер указателя задаётся в Системных настройках → Универсальный доступ → Дисплей.";
 "Replaces the pointer for the whole system using a private macOS interface. If the pointer ever looks wrong, click Reset — or log out and back in, which always restores it." = "Заменяет указатель во всей системе через приватный интерфейс macOS. Если указатель когда-нибудь выглядит неправильно, нажмите «Сбросить» — или выйдите из системы и войдите снова, это всегда всё восстанавливает.";
 "Choose" = "Выбрать";
 "Choose a folder of cursors (.ani, .cur, .png)." = "Выберите папку с курсорами (.ani, .cur, .png).";
@@ -119,3 +119,21 @@
 "Applied %d cursors. Move the mouse to see them." = "Применено курсоров: %d. Подвигайте мышь, чтобы увидеть.";
 "Applied %d cursors; %d could not be set." = "Применено курсоров: %d; не удалось установить: %d.";
 "System cursors restored." = "Системные курсоры восстановлены.";
+
+/* Cursor roles (preview labels) */
+"Pointer" = "Указатель";
+"Text (I-beam)" = "Текст";
+"Link" = "Ссылка";
+"Pointing hand" = "Рука";
+"Busy (spinner)" = "Занят";
+"Working in background" = "Фоновый режим";
+"Move" = "Перемещение";
+"Closed hand" = "Сжатая рука";
+"Open hand" = "Открытая рука";
+"Crosshair" = "Прицел";
+"Not allowed" = "Недоступно";
+"Resize ↕" = "Размер ↕";
+"Resize ↔" = "Размер ↔";
+"Resize ⤡" = "Размер ⤡";
+"Resize ⤢" = "Размер ⤢";
+"Help" = "Справка";

@@ -2,6 +2,9 @@ import SwiftUI
 import WallpaperCore
 
 struct SettingsView: View {
+    /// Window content height; the form scrolls when its sections need more.
+    var height: CGFloat = 720
+
     @EnvironmentObject private var preferences: Preferences
     @EnvironmentObject private var library: WallpaperLibrary
     @State private var opensAtLogin = LaunchAtLogin.isEnabled
@@ -67,7 +70,7 @@ struct SettingsView: View {
             }
         }
         .formStyle(.grouped)
-        .frame(width: 500, height: 720)
+        .frame(width: 500, height: height)
     }
 
     private func updateLoginItem(_ enabled: Bool) {
