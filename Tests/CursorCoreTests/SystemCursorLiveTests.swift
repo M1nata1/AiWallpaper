@@ -47,3 +47,39 @@ final class SystemCursorLiveTests: XCTestCase {
         XCTAssertEqual(restored.height, original.height, accuracy: 0.5)
     }
 }
+
+/// Also runs against the window server, but under a made-up cursor name that nothing on screen
+/// ever uses, so it is safe in any session and runs with the other tests.
+@MainActor
+final class SystemCursorKeepTests: XCTestCase {
+    private func temporaryFolder() -> URL {
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent("AiWallpaperCursorTest-\(UUID().uuidString)")
+        addTeardownBlock { try? FileManager.default.removeItem(at: url) }
+        return url
+    }
+
+    func testPutsBackAReplacedCursorAndResetRemovesIt() throws {
+        let role = CursorRole(id: "com.fadevec.aiwallpaper.test.\(UUID().uuidString)", displayName: "Test",
+                              windowsRegistryNames: [], windowsAliases: [])
+        let frames = (0..<4).map { _ in CursorFixtures.tinyImage() }
+        let decoded = DecodedCursor(frames: frames, frameDurations: Array(repeating: 0.1, count: 4),
+                                    hotSpot: CGPoint(x: 1, y: 1), pixelSize: CGSize(width: 2, height: 2))
+        let theme = CursorTheme(name: "Test", assignments: [CursorAssignment(role: role, sourceURL: URL(fileURLWithPath: "/"), decoded: decoded)],
+                                unmatchedFiles: [])
+        let app = SystemCursorController(rootURL: temporaryFolder())
+        XCTAssertEqual(app.apply(theme, pointSize: 28).applied, ["Test"])
+        XCTAssertTrue(app.replacedAssignments(in: theme, pointSize: 28).isEmpty)
+
+        // Something else registers its own cursor under that name, as macOS 26 does with the pointer.
+        SystemCursorController(rootURL: temporaryFolder()).apply(theme, pointSize: 20)
+        XCTAssertEqual(app.replacedAssignments(in: theme, pointSize: 28).map(\.role.id), [role.id])
+
+        XCTAssertEqual(app.restoreReplaced(theme, pointSize: 28).applied, ["Test"])
+        XCTAssertTrue(app.replacedAssignments(in: theme, pointSize: 28).isEmpty)
+        XCTAssertEqual(try XCTUnwrap(app.registeredSize(roleID: role.id)).width, 28, accuracy: 0.5)
+
+        // The name did not exist before the theme, so Reset must remove it, not leave ours behind.
+        app.reset()
+        XCTAssertNil(app.registeredSize(roleID: role.id))
+    }
+}

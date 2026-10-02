@@ -27,6 +27,7 @@ CGError CGSCopyRegisteredCursorImages(CGSConnectionID cid, const char *cursorNam
                                       CGPoint *hotSpot, unsigned long *frameCount,
                                       CGFloat *frameDuration, CFArrayRef *imageArray);
 
+// Pass true for the flag: with false the call returns success but leaves the cursor registered.
 CGError CGSRemoveRegisteredCursor(CGSConnectionID cid, const char *cursorName, bool unknownFlag);
 CGError CoreCursorUnregisterAll(CGSConnectionID cid);
 CGError CoreCursorSet(CGSConnectionID cid, CGSCursorID cursorID);

@@ -6,6 +6,7 @@ import WallpaperCore
 /// View with: log stream --predicate 'subsystem == "com.fadevec.AiWallpaper"'
 enum Log {
     static let playback = Logger(subsystem: "com.fadevec.AiWallpaper", category: "playback")
+    static let cursor = Logger(subsystem: "com.fadevec.AiWallpaper", category: "cursor")
 }
 
 enum LaunchAtLogin {

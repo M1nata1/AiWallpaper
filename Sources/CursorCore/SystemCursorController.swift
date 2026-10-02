@@ -64,14 +64,7 @@ public final class SystemCursorController {
         var result = ApplyResult(applied: [], failed: [])
         for assignment in theme.assignments {
             backUpIfNeeded(roleID: assignment.role.id)
-            let animation = Self.fitToFrameLimit(assignment.decoded.frames, durations: assignment.decoded.frameDurations)
-            if register(images: animation.frames,
-                        roleID: assignment.role.id,
-                        pixelSize: assignment.decoded.pixelSize,
-                        hotSpotPixels: assignment.decoded.hotSpot,
-                        frameCount: animation.frames.count,
-                        frameDuration: CGFloat(animation.frameDuration),
-                        pointSize: pointSize) {
+            if register(assignment, pointSize: pointSize) {
                 result.applied.append(assignment.role.displayName)
             } else {
                 result.failed.append(assignment.role.displayName)
@@ -84,6 +77,46 @@ public final class SystemCursorController {
         return result
     }
 
+    // MARK: - Keeping the theme
+
+    /// The theme's cursors that no longer hold its images. macOS 26 puts its own pointer and
+    /// I-beam back when it re-applies the Accessibility pointer settings, so an app that keeps a
+    /// theme applied has to look from time to time. Changes nothing.
+    public func replacedAssignments(in theme: CursorTheme, pointSize: CGFloat) -> [CursorAssignment] {
+        theme.assignments.filter { !holds($0, pointSize: pointSize) }
+    }
+
+    /// Registers again every cursor of the theme that macOS has replaced.
+    @discardableResult
+    public func restoreReplaced(_ theme: CursorTheme, pointSize: CGFloat) -> ApplyResult {
+        var result = ApplyResult(applied: [], failed: [])
+        for assignment in replacedAssignments(in: theme, pointSize: pointSize) {
+            if register(assignment, pointSize: pointSize) {
+                result.applied.append(assignment.role.displayName)
+            } else {
+                result.failed.append(assignment.role.displayName)
+            }
+        }
+        return result
+    }
+
+    /// Whether the window server still has the assignment's cursor: the same size, hot spot and
+    /// frame count as registered. The system's own cursors differ in at least one of them.
+    private func holds(_ assignment: CursorAssignment, pointSize: CGFloat) -> Bool {
+        let expected = Registration(assignment, pointSize: pointSize)
+        var size = CGSize.zero
+        var hot = CGPoint.zero
+        var frameCount: UInt = 0
+        var duration: CGFloat = 0
+        var array: Unmanaged<CFArray>?
+        let err = CGSCopyRegisteredCursorImages(cid, assignment.role.id, &size, &hot, &frameCount, &duration, &array)
+        _ = array?.takeRetainedValue()
+        func same(_ a: CGFloat, _ b: CGFloat) -> Bool { abs(a - b) < 0.5 }
+        return err == .success && Int(frameCount) == expected.frames.count
+            && same(size.width, expected.size.width) && same(size.height, expected.size.height)
+            && same(hot.x, expected.hotSpot.x) && same(hot.y, expected.hotSpot.y)
+    }
+
     // MARK: - Reset
 
     /// Restores every backed-up cursor and forgets the applied theme.
@@ -93,7 +126,8 @@ public final class SystemCursorController {
             guard let backup = try? JSONDecoder().decode(Backup.self, from: Data(contentsOf: file)) else { continue }
             if backup.absent == true {
                 // The window server had no such cursor before; removing ours brings back its built-in one.
-                _ = CGSRemoveRegisteredCursor(cid, backup.roleID, false)
+                // The flag must be true: with false the call succeeds but removes nothing.
+                _ = CGSRemoveRegisteredCursor(cid, backup.roleID, true)
                 continue
             }
             let images = backup.imageFiles.compactMap { loadImage(backupURL.appendingPathComponent($0)) }
@@ -148,18 +182,34 @@ public final class SystemCursorController {
 
     // MARK: - Registration
 
-    private func register(images: [CGImage], roleID: String, pixelSize: CGSize, hotSpotPixels: CGPoint,
-                          frameCount: Int, frameDuration: CGFloat, pointSize: CGFloat) -> Bool {
-        let longest = max(pixelSize.width, pixelSize.height, 1)
-        let scale = pointSize / longest
-        let size = CGSize(width: pixelSize.width * scale, height: pixelSize.height * scale)
-        let hotSpot = CGPoint(x: hotSpotPixels.x * scale, y: hotSpotPixels.y * scale)
+    /// What gets registered for an assignment: its frames fitted to the frame limit, scaled so
+    /// the longest side is `pointSize`.
+    private struct Registration {
+        let frames: [CGImage]
+        let frameDuration: CGFloat
+        let size: CGSize      // points
+        let hotSpot: CGPoint  // points
+
+        init(_ assignment: CursorAssignment, pointSize: CGFloat) {
+            let decoded = assignment.decoded
+            let animation = SystemCursorController.fitToFrameLimit(decoded.frames, durations: decoded.frameDurations)
+            let scale = pointSize / max(decoded.pixelSize.width, decoded.pixelSize.height, 1)
+            frames = animation.frames
+            frameDuration = CGFloat(animation.frameDuration)
+            size = CGSize(width: decoded.pixelSize.width * scale, height: decoded.pixelSize.height * scale)
+            hotSpot = CGPoint(x: decoded.hotSpot.x * scale, y: decoded.hotSpot.y * scale)
+        }
+    }
+
+    private func register(_ assignment: CursorAssignment, pointSize: CGFloat) -> Bool {
+        let registration = Registration(assignment, pointSize: pointSize)
         // The window server stores an animated cursor as ONE image: a vertical strip of all
         // frames (height = frameHeight × frameCount), not an array of separate frames. Building
         // the strip also normalises the pixel format, which the raw ImageIO frames are not in.
-        guard let strip = verticalStrip(images, frameSize: pixelSize) else { return false }
-        return registerRaw(images: [strip], roleID: roleID, size: size, hotSpot: hotSpot,
-                           frameCount: images.count, frameDuration: frameDuration)
+        guard let strip = verticalStrip(registration.frames, frameSize: assignment.decoded.pixelSize) else { return false }
+        return registerRaw(images: [strip], roleID: assignment.role.id, size: registration.size,
+                           hotSpot: registration.hotSpot, frameCount: registration.frames.count,
+                           frameDuration: registration.frameDuration)
     }
 
     /// Stacks the frames top-to-bottom into one RGBA image.

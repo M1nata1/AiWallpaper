@@ -30,6 +30,11 @@ final class CursorSettings: ObservableObject {
     /// Folder of the pack shown in the preview.
     private var themeFolder: URL?
 
+    /// The pack that is applied, kept to put back cursors macOS replaces with its own.
+    private var appliedTheme: CursorTheme?
+    private var keepTimer: Timer?
+    private var observesSystemEvents = false
+
     private enum Key {
         static let folderPath = "cursorFolderPath"
         /// Folder of the applied pack, which can differ from the one being previewed.
@@ -110,8 +115,11 @@ final class CursorSettings: ObservableObject {
         guard let theme else { return }
         let result = controller.apply(theme, pointSize: pointSize)
         isApplied = controller.isApplied
-        if isApplied, let themeFolder {
-            defaults.set(themeFolder.path, forKey: Key.appliedFolderPath)
+        if isApplied {
+            keep(theme)
+            if let themeFolder {
+                defaults.set(themeFolder.path, forKey: Key.appliedFolderPath)
+            }
         }
         if result.failed.isEmpty {
             status = String.localizedStringWithFormat(
@@ -141,9 +149,59 @@ final class CursorSettings: ObservableObject {
         guard let applied, !applied.assignments.isEmpty else { return }
         controller.apply(applied, pointSize: pointSize)
         defaults.set(folder.path, forKey: Key.appliedFolderPath)
+        keep(applied)
+    }
+
+    /// Keeps the pack in place. macOS 26 puts its own pointer and I-beam back whenever it
+    /// re-applies the Accessibility pointer settings — at login, after sleep, on display changes —
+    /// so the app looks right after such events, and every few seconds for anything that posts no
+    /// notification. A look costs about a millisecond and changes only cursors that were replaced.
+    private func keep(_ theme: CursorTheme) {
+        appliedTheme = theme
+        if keepTimer == nil {
+            let timer = Timer(timeInterval: 5, repeats: true) { [weak self] _ in
+                Task { @MainActor in self?.restoreReplacedCursors() }
+            }
+            timer.tolerance = 2
+            RunLoop.main.add(timer, forMode: .common)
+            keepTimer = timer
+        }
+        guard !observesSystemEvents else { return }
+        observesSystemEvents = true
+        let workspace = NSWorkspace.shared.notificationCenter
+        let events: [(NotificationCenter, Notification.Name)] = [
+            (.default, NSApplication.didChangeScreenParametersNotification),
+            (workspace, NSWorkspace.didWakeNotification),
+            (workspace, NSWorkspace.screensDidWakeNotification),
+            (workspace, NSWorkspace.sessionDidBecomeActiveNotification),
+            (workspace, NSWorkspace.accessibilityDisplayOptionsDidChangeNotification),
+        ]
+        for (center, name) in events {
+            center.addObserver(forName: name, object: nil, queue: .main) { [weak self] _ in
+                Task { @MainActor in
+                    // Give macOS a moment to finish putting its own cursors back.
+                    try? await Task.sleep(nanoseconds: 1_000_000_000)
+                    self?.restoreReplacedCursors()
+                }
+            }
+        }
+    }
+
+    private func restoreReplacedCursors() {
+        guard let appliedTheme else { return }
+        let result = controller.restoreReplaced(appliedTheme, pointSize: pointSize)
+        if !result.applied.isEmpty {
+            Log.cursor.info("macOS replaced cursors; put back: \(result.applied.joined(separator: ", "), privacy: .public)")
+        }
+        if !result.failed.isEmpty {
+            Log.cursor.error("Could not put back: \(result.failed.joined(separator: ", "), privacy: .public)")
+        }
     }
 
     func reset() {
+        appliedTheme = nil
+        keepTimer?.invalidate()
+        keepTimer = nil
         controller.reset()
         defaults.removeObject(forKey: Key.appliedFolderPath)
         isApplied = controller.isApplied

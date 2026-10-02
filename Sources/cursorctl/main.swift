@@ -5,17 +5,29 @@ import Foundation
 // cursorctl reset                           – restore the system cursors
 // cursorctl status                          – print what is applied
 // cursorctl check "<folder>"                – load a folder and print the mapping (no changes)
+// cursorctl verify "<folder>" [pointSize]   – list the folder's cursors macOS has replaced (no changes)
 
 @MainActor
 func run() -> Int32 {
     let args = CommandLine.arguments
     let controller = SystemCursorController()
     guard args.count >= 2 else {
-        print("usage: cursorctl apply <folder> [size] | reset | status | check <folder>")
+        print("usage: cursorctl apply <folder> [size] | reset | status | check <folder> | verify <folder> [size]")
         return 2
     }
 
     switch args[1] {
+    case "verify":
+        guard args.count >= 3 else { print("verify needs a folder path"); return 2 }
+        let theme = CursorTheme.load(fromFolder: URL(fileURLWithPath: args[2]))
+        let size = args.count > 3 ? (Double(args[3]) ?? 28) : 28
+        let replaced = controller.replacedAssignments(in: theme, pointSize: size)
+        print("\(theme.assignments.count - replaced.count) of \(theme.assignments.count) cursors hold the pack")
+        for assignment in replaced {
+            print("  replaced: \(assignment.role.displayName) (\(assignment.role.id))")
+        }
+        return replaced.isEmpty ? 0 : 1
+
     case "check":
         guard args.count >= 3 else { print("check needs a folder path"); return 2 }
         let theme = CursorTheme.load(fromFolder: URL(fileURLWithPath: args[2]))
