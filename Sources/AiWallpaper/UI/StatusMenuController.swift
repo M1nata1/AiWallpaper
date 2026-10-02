@@ -54,25 +54,29 @@ final class StatusMenuController: NSObject, NSMenuDelegate {
         let pauseTitle = manager.isPausedByUser
             ? NSLocalizedString("Resume", comment: "Menu item")
             : NSLocalizedString("Pause", comment: "Menu item")
-        let pause = item(pauseTitle, #selector(togglePause), key: "p")
+        let pause = item(pauseTitle, #selector(togglePause), key: "p", symbol: manager.isPausedByUser ? "play" : "pause")
         pause.isEnabled = manager.hasWallpaper
         menu.addItem(pause)
 
-        let next = item(NSLocalizedString("Next Wallpaper", comment: "Menu item"), #selector(showNextWallpaper), key: "n")
+        let next = item(NSLocalizedString("Next Wallpaper", comment: "Menu item"), #selector(showNextWallpaper), key: "n",
+                        symbol: "forward.end")
         next.isEnabled = !library.items.isEmpty
         menu.addItem(next)
 
         let wallpapers = NSMenuItem(title: NSLocalizedString("Wallpaper", comment: "Menu item"), action: nil, keyEquivalent: "")
         wallpapers.submenu = wallpaperMenu()
+        setSymbol("photo.on.rectangle", on: wallpapers)
         menu.addItem(wallpapers)
 
         menu.addItem(.separator())
-        menu.addItem(item(NSLocalizedString("Add Wallpapers…", comment: "Menu item"), #selector(addFiles), key: "o"))
-        menu.addItem(item(NSLocalizedString("Open Library…", comment: "Menu item"), #selector(openLibrary), key: "l"))
-        menu.addItem(item(NSLocalizedString("Settings…", comment: "Menu item"), #selector(openSettings), key: ","))
+        menu.addItem(item(NSLocalizedString("Add Wallpapers…", comment: "Menu item"), #selector(addFiles), key: "o", symbol: "plus"))
+        menu.addItem(item(NSLocalizedString("Open Library…", comment: "Menu item"), #selector(openLibrary), key: "l",
+                          symbol: "square.grid.2x2"))
+        menu.addItem(item(NSLocalizedString("Settings…", comment: "Menu item"), #selector(openSettings), key: ",", symbol: "gearshape"))
         menu.addItem(.separator())
-        menu.addItem(item(NSLocalizedString("About AiWallpaper", comment: "Menu item"), #selector(showAbout), key: ""))
-        menu.addItem(item(NSLocalizedString("Quit AiWallpaper", comment: "Menu item"), #selector(quit), key: "q"))
+        menu.addItem(item(NSLocalizedString("About AiWallpaper", comment: "Menu item"), #selector(showAbout), key: "",
+                          symbol: "info.circle"))
+        menu.addItem(item(NSLocalizedString("Quit AiWallpaper", comment: "Menu item"), #selector(quit), key: "q", symbol: "power"))
     }
 
     private func wallpaperMenu() -> NSMenu {
@@ -92,7 +96,7 @@ final class StatusMenuController: NSObject, NSMenuDelegate {
             menu.addItem(menuItem)
         }
         menu.addItem(.separator())
-        let off = item(NSLocalizedString("Turn Off", comment: "Menu item"), #selector(turnOff), key: "")
+        let off = item(NSLocalizedString("Turn Off", comment: "Menu item"), #selector(turnOff), key: "", symbol: "stop.circle")
         off.isEnabled = manager.hasWallpaper
         menu.addItem(off)
         return menu
@@ -123,10 +127,22 @@ final class StatusMenuController: NSObject, NSMenuDelegate {
         return thumbnail
     }
 
-    private func item(_ title: String, _ action: Selector, key: String) -> NSMenuItem {
+    private func item(_ title: String, _ action: Selector, key: String, symbol: String? = nil) -> NSMenuItem {
         let item = NSMenuItem(title: title, action: action, keyEquivalent: key)
         item.target = self
+        if let symbol {
+            setSymbol(symbol, on: item)
+        }
         return item
+    }
+
+    /// macOS 26 puts a symbol next to some items by itself — a gear by "Settings…" — and indents the
+    /// rest of that group to line up with it, so the menu looked ragged. There every item gets its
+    /// own symbol, as in the system's menus; earlier systems draw menus without symbols.
+    private func setSymbol(_ name: String, on item: NSMenuItem) {
+        if #available(macOS 26, *) {
+            item.image = NSImage(systemSymbolName: name, accessibilityDescription: nil)
+        }
     }
 
     @objc private func togglePause() { manager.isPausedByUser.toggle() }
